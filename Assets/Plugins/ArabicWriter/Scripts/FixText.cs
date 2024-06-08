@@ -3,7 +3,7 @@
 using UnityEngine;
 using UnityEditor;
 using TMPro;
-
+using KonashArabicSupport;
 #if UNITY_EDITOR
 
 public class FixText : Editor

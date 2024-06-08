@@ -5,8 +5,7 @@
 using UnityEngine;
 using UnityEditor;
 using TMPro;
-using System;
-using System.Linq;
+using KonashArabicSupport;
 
 #if UNITY_EDITOR
 [ExecuteInEditMode]
