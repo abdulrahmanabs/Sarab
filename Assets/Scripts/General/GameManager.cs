@@ -1,6 +1,5 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+using AYellowpaper.SerializedCollections;
+using Lean.Pool;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;
@@ -11,7 +10,8 @@ public class GameManager : Singleton<GameManager>
     public UnityEvent OnLost;
     public UnityEvent OnPause;
 
-
+    [SerializeField]
+  SerializedDictionary <string,int> test = new SerializedDictionary <string,int> ();
     private int currentSceneCount = 0;
     private void OnEnable()
     {
