@@ -3182,7 +3182,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   volumeTrigger: {fileID: 2091766222}
   volumeLayer:
-    m_Bits: 32
+    serializedVersion: 2
+    m_Bits: 4294901792
   stopNaNPropagation: 1
   finalBlitToCameraTarget: 0
   antialiasingMode: 2

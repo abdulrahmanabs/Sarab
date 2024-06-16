@@ -5,10 +5,12 @@ using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.EventSystems;
 using SlimUI.ModernMenu;
-
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.UI;
+using System;
 public class UIMenuManager : MonoBehaviour
 {
-    private Animator CameraObject;
+    private Animator animator;
 
     // campaign button sub menu
     [Header("MENUS")]
@@ -25,7 +27,8 @@ public class UIMenuManager : MonoBehaviour
 
     private UiPanel currentUiPanel;
 
-   
+
+
     public enum Theme { custom1, custom2, custom3 };
     [Header("THEME SETTINGS")]
     public Theme theme;
@@ -50,7 +53,7 @@ public class UIMenuManager : MonoBehaviour
     [Tooltip("The UI Sub-Panel under KEY BINDINGS for GENERAL")]
     public GameObject PanelGeneral;
 
-
+    #region Settings Screen
     // highlights in settings screen
     [Header("SETTINGS SCREEN")]
     [Tooltip("Highlight Image for when GAME Tab is selected in Settings")]
@@ -67,7 +70,8 @@ public class UIMenuManager : MonoBehaviour
     public GameObject lineCombat;
     [Tooltip("Highlight Image for when GENERAL Sub-Tab is selected in KEY BINDINGS")]
     public GameObject lineGeneral;
-
+    #endregion
+    #region Loading Screen
     [Header("LOADING SCREEN")]
     [Tooltip("If this is true, the loaded scene won't load until receiving user input")]
     public bool waitForInput = true;
@@ -76,7 +80,7 @@ public class UIMenuManager : MonoBehaviour
     public Slider loadingBar;
     public TMP_Text loadPromptText;
     public KeyCode userPromptKey;
-
+    #endregion
     [Header("SFX")]
     [Tooltip("The GameObject holding the Audio Source component for the HOVER SOUND")]
     public AudioSource hoverSound;
@@ -85,11 +89,10 @@ public class UIMenuManager : MonoBehaviour
     [Tooltip("The GameObject holding the Audio Source component for the SWOOSH SOUND when switching to the Settings Screen")]
     public AudioSource swooshSound;
 
-    private EventSystem eventSystem;
 
     void Start()
     {
-        CameraObject = transform.GetComponent<Animator>();
+        animator = transform.GetComponent<Animator>();
 
         playMenu.gameObject.SetActive(false);
         exitMenu.gameObject.SetActive(false);
@@ -99,9 +102,16 @@ public class UIMenuManager : MonoBehaviour
 
         currentUiPanel = mainMenu;
 
-        eventSystem= EventSystem.current;
+        var uiModule = EventSystem.current.gameObject.GetComponent<InputSystemUIInputModule>();
+        uiModule.cancel.action.performed += Back;
 
-        SetThemeColors();
+
+
+    }
+
+    private void Back(InputAction.CallbackContext context)
+    {
+        ReturnMenu();
     }
 
     void SetThemeColors()
@@ -138,6 +148,7 @@ public class UIMenuManager : MonoBehaviour
 
     public void ReturnMenu()
     {
+        if(currentUiPanel!=mainMenu)
         OpenPnl(mainMenu);
     }
 
@@ -157,12 +168,12 @@ public class UIMenuManager : MonoBehaviour
     public void Position2()
     {
         DisablePlayCampaign();
-        CameraObject.SetFloat("Animate", 1);
+        animator.SetFloat("Animate", 1);
     }
 
     public void Position1()
     {
-        CameraObject.SetFloat("Animate", 0);
+        animator.SetFloat("Animate", 0);
     }
 
     void DisablePanels()
@@ -295,13 +306,13 @@ public class UIMenuManager : MonoBehaviour
         }
     }
 
-    private void OpenPnl(UiPanel pnl) { 
+    private void OpenPnl(UiPanel pnl)
+    {
         currentUiPanel.gameObject.SetActive(false);
-        currentUiPanel= pnl;
+        currentUiPanel = pnl;
         currentUiPanel.gameObject.SetActive(true);
-       EventSystem.current.SetSelectedGameObject (currentUiPanel?.firstObjectToSelect );
-    
+        EventSystem.current.SetSelectedGameObject(currentUiPanel?.firstObjectToSelect);
+
     }
 
-    private void ClosePnl() { }
 }
