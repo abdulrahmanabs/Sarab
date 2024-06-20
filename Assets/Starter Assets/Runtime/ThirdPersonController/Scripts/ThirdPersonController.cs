@@ -1,6 +1,9 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+
 #endif
 
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
@@ -14,6 +17,7 @@ namespace StarterAssets
 #endif
     public class ThirdPersonController : MonoBehaviour
     {
+
         [Header("Player")]
         [Tooltip("Move speed of the character in m/s")]
         public float MoveSpeed = 2.0f;
@@ -97,9 +101,15 @@ namespace StarterAssets
         private int _animIDJump;
         private int _animIDFreeFall;
         private int _animIDMotionSpeed;
+        private int _animIDAttacking;
+        private int _animIDisTakingDamage;
+        //right hand 
+        public Transform rightHandTransform; // Assign this in the Inspector
+
 
 #if ENABLE_INPUT_SYSTEM
         private PlayerInput _playerInput;
+
 #endif
         private Animator _animator;
         private CharacterController _controller;
@@ -109,6 +119,9 @@ namespace StarterAssets
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
+        private bool _isAttacking = false;
+        public bool _isTakingDamage = false;
+
 
         private bool IsCurrentDeviceMouse
         {
@@ -135,7 +148,7 @@ namespace StarterAssets
         private void Start()
         {
             _cinemachineTargetYaw = CinemachineCameraTarget.transform.rotation.eulerAngles.y;
-            
+
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
@@ -159,6 +172,7 @@ namespace StarterAssets
             JumpAndGravity();
             GroundedCheck();
             Move();
+            Attack();
         }
 
         private void LateUpdate()
@@ -173,6 +187,9 @@ namespace StarterAssets
             _animIDJump = Animator.StringToHash("Jump");
             _animIDFreeFall = Animator.StringToHash("FreeFall");
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
+            _animIDAttacking = Animator.StringToHash("IsAttaking");
+            _animIDisTakingDamage = Animator.StringToHash("TakeDamageTrigger");
+
         }
 
         private void GroundedCheck()
@@ -210,9 +227,53 @@ namespace StarterAssets
             CinemachineCameraTarget.transform.rotation = Quaternion.Euler(_cinemachineTargetPitch + CameraAngleOverride,
                 _cinemachineTargetYaw, 0.0f);
         }
+        private void Attack()
+        {
+            if (_input.attack && !_isAttacking && Grounded)
+            {
+                _isAttacking = true;
+                _animator.SetTrigger(_animIDAttacking);
+            }
+        }
+        private void Attacking()
+        {
+            if (_input.attack && !_isAttacking && Grounded)
+            {
+                _isAttacking = true;
+                _animator.SetTrigger(_animIDAttacking);
 
+                // Perform a raycast from the right hand position in the direction the player is facing
+                RaycastHit hit;
+                if (Physics.Raycast(rightHandTransform.position, transform.forward, out hit, 10))
+                {
+                    // If we hit something, change the direction of the rightHandTransform
+                    rightHandTransform.rotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
+
+                    // Draw a gizmo to visualize the hit point
+                    DebugDrawHitPoint(hit.point);
+                }
+            }
+        }
+
+
+        private void DebugDrawHitPoint(Vector3 point)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawWireSphere(point, 0.1f);
+        }
+        public void EndAttack()
+        {
+            _isAttacking = false;
+            _input.attack = false;
+            if (_hasAnimator)
+            {
+                _animator.SetBool(_animIDAttacking, false);
+            }
+        }
         private void Move()
         {
+            if (_isAttacking) return;
+            if (_isTakingDamage) return;
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
@@ -300,7 +361,7 @@ namespace StarterAssets
                 }
 
                 // Jump
-                if (_input.jump && _jumpTimeoutDelta <= 0.0f)
+                if (_input.jump && _jumpTimeoutDelta <= 0.0f && !_isAttacking)
                 {
                     // the square root of H * -2 * G = how much velocity needed to reach desired height
                     _verticalVelocity = Mathf.Sqrt(JumpHeight * -2f * Gravity);
@@ -347,7 +408,26 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+        public void TakeDamage()
+        {
+            if (_isTakingDamage) return;
+            if (Grounded)
+            {
+                _isTakingDamage = true;
 
+                _animator.SetTrigger(_animIDisTakingDamage);
+
+                StartCoroutine(TakeDamageRoutine());
+            }
+        }
+
+        private IEnumerator TakeDamageRoutine()
+        {
+            yield return new WaitForSeconds(1f); // Adjust the duration based on your animation length
+
+            _isTakingDamage = false;
+
+        }
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
             if (lfAngle < -360f) lfAngle += 360f;

@@ -6,11 +6,12 @@ TagManager:
   tags:
   - CinemachineTarget
   - Portals
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullet
   - Water
   - UI
   - 
