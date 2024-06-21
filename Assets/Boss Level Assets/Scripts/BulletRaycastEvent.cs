@@ -45,7 +45,7 @@ public class BulletRaycastEvent : MonoBehaviour
                 }
 
                 // Draw a gizmo to visualize the hit sphere
-                DebugDrawHitSphere(rightHandTransform.position, sphereRadius);
+                //DebugDrawHitSphere(rightHandTransform.position, sphereRadius);
             }
         }
     }
