@@ -94,7 +94,7 @@ Material:
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
-    - Color_5A29FF9E: {r: 0, g: 0.2509804, b: 0.07800653, a: 1}
+    - Color_5A29FF9E: {r: 0, g: 0.55272, b: 1.6055586, a: 1}
     - Color_9DC7EC12: {r: 0.0047715902, g: 1, b: 0, a: 1}
     - Color_BB588D2D: {r: 0, g: 0.41145644, b: 0.5486086, a: 1}
     - Vector2_2181DF03: {r: 4.82, g: 20, b: 0, a: 0}
