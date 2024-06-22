@@ -103,6 +103,7 @@ namespace StarterAssets
         private int _animIDMotionSpeed;
         private int _animIDAttacking;
         private int _animIDisTakingDamage;
+        private int _animIDDying;
         //right hand 
         public Transform rightHandTransform; // Assign this in the Inspector
 
@@ -122,6 +123,8 @@ namespace StarterAssets
         private bool _isAttacking = false;
         public bool _isTakingDamage = false;
 
+        private bool _canMove = true;
+        private bool _canJump = true;
 
         private bool IsCurrentDeviceMouse
         {
@@ -179,7 +182,11 @@ namespace StarterAssets
         {
             CameraRotation();
         }
-
+        public void DisableMovement()
+        {
+            _canMove = false;
+            _canJump = false;
+        }
         private void AssignAnimationIDs()
         {
             _animIDSpeed = Animator.StringToHash("Speed");
@@ -189,6 +196,7 @@ namespace StarterAssets
             _animIDMotionSpeed = Animator.StringToHash("MotionSpeed");
             _animIDAttacking = Animator.StringToHash("IsAttaking");
             _animIDisTakingDamage = Animator.StringToHash("TakeDamageTrigger");
+            _animIDDying = Animator.StringToHash("Dying");
 
         }
 
@@ -229,10 +237,21 @@ namespace StarterAssets
         }
         private void Attack()
         {
-            if (_input.attack && !_isAttacking && Grounded)
+            // Check if the attack input is pressed and the player is not already attacking
+            if (_input.attack && !_isAttacking)
             {
-                _isAttacking = true;
-                _animator.SetTrigger(_animIDAttacking);
+                // Check if the player is grounded and not currently in a jump or fall animation
+                if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall))
+                {
+                    // Player is grounded and can attack
+                    _isAttacking = true;
+                    _animator.SetTrigger(_animIDAttacking);
+                }
+                else
+                {
+                    // Player is not grounded, so reset the attack input to false
+                    _input.attack = false;
+                }
             }
         }
         private void Attacking()
@@ -274,6 +293,7 @@ namespace StarterAssets
         {
             if (_isAttacking) return;
             if (_isTakingDamage) return;
+            if (!_canMove) return;
             // set target speed based on move speed, sprint speed and if sprint is pressed
             float targetSpeed = _input.sprint ? SprintSpeed : MoveSpeed;
 
@@ -342,6 +362,7 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
+            if (!_canJump) return;
             if (Grounded)
             {
                 // reset the fall timeout timer
@@ -408,6 +429,13 @@ namespace StarterAssets
                 _verticalVelocity += Gravity * Time.deltaTime;
             }
         }
+        public void Dying()
+        {
+            _animator.applyRootMotion = true;
+            _animator.SetBool(_animIDDying, true);
+
+
+        }
         public void TakeDamage()
         {
             if (_isTakingDamage) return;
@@ -423,7 +451,7 @@ namespace StarterAssets
 
         private IEnumerator TakeDamageRoutine()
         {
-            yield return new WaitForSeconds(1f); // Adjust the duration based on your animation length
+            yield return new WaitForSeconds(1.3f); // Adjust the duration based on your animation length
 
             _isTakingDamage = false;
 

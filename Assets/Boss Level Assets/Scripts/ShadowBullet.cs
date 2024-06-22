@@ -37,11 +37,12 @@ public class ShadowBullet : MonoBehaviour
         // Instantiate hit effect
         if (_hitEffectPrefab != null)
         {
-            Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
+            GameObject hitVFX = Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
+            Destroy(hitVFX, 6);
         }
 
         // Destroy the bullet
         Destroy(gameObject);
-   
+
     }
 }
