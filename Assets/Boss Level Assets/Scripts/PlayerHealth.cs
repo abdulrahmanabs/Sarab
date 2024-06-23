@@ -31,7 +31,7 @@ public class PlayerHealth : MonoBehaviour
         }
         else
         {
-            controller.TakeDamage();
+            controller.TakeDamage(transform.position);
             // Invoke the OnTakeDamage event
             //OnTakeDamage?.Invoke();
         }

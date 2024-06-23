@@ -44,6 +44,8 @@ public class BossSystem : MonoBehaviour
             GameObject bullet = Instantiate(bulletPrefab, spawnPosition, Quaternion.Euler(bulletSpawnPoint.rotation.x, bulletSpawnPoint.rotation.y - 90, bulletSpawnPoint.rotation.z));
 
         }
+
+
     }
     void ShootBullets1()
     {

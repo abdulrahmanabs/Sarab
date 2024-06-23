@@ -126,6 +126,11 @@ namespace StarterAssets
         private bool _canMove = true;
         private bool _canJump = true;
 
+
+        [Header("Knockback")]
+        public float knockbackForce = 10f;
+        public float knockbackDuration = 0.2f;
+        private Vector3 knockbackDirection;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -436,7 +441,7 @@ namespace StarterAssets
 
 
         }
-        public void TakeDamage()
+        public void TakeDamage(Vector3 attackPosition)
         {
             if (_isTakingDamage) return;
             if (Grounded)
@@ -444,8 +449,26 @@ namespace StarterAssets
                 _isTakingDamage = true;
 
                 _animator.SetTrigger(_animIDisTakingDamage);
+                
+                // إضافة تأثير الارتداد
+                knockbackDirection = (transform.position - attackPosition).normalized;
+                StartCoroutine(ApplyKnockback());
 
                 StartCoroutine(TakeDamageRoutine());
+            }
+        }
+
+        private IEnumerator ApplyKnockback()
+        {
+            float timer = 0;
+
+            while (timer < knockbackDuration)
+            {
+                // تحريك اللاعب بالاتجاه والسرعة المعطاة
+                transform.position += knockbackDirection * knockbackForce * Time.deltaTime;
+
+                timer += Time.deltaTime;
+                yield return null;
             }
         }
 
