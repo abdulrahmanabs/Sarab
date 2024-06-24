@@ -1,47 +1,70 @@
+using Microlight.MicroBar;
 using StarterAssets;
-using System;
 using UnityEngine;
-using UnityEngine.UI; // To update UI elements
-
 
 
 public class PlayerHealth : MonoBehaviour
 {
-    public float maxHealth = 100f;
-    [SerializeField] private float currentHealth;
-    ThirdPersonController controller;
-    public Slider healthSlider; // UI element to display health
-    public GameObject deathEffectPrefab;
-    public event Action OnTakeDamage;
+    [Header("Variables & Constant")]
+    [SerializeField] private float _maxHealth = 100f;
+    [SerializeField] private float _currentHealth;
+
+
+    [Space(20)]
+    [Header("Components")]
+    private ThirdPersonController _TPController;
+
+
+
+    [Space(20)]
+    [Header("health Bar")]
+    [SerializeField] MicroBar Playerhealthbar;
+
+
+    [Space(20)]
+    [Header("Referance")]
+    [SerializeField] private GameObject deathEffectPrefab;
+
+
+    private void Awake()
+    {
+        _currentHealth = _maxHealth;
+    }
     void Start()
     {
-        controller = GetComponent<ThirdPersonController>();
-        currentHealth = maxHealth;
+        _TPController = GetComponent<ThirdPersonController>();
+        InsHealthBar();
+    }
+
+    private void InsHealthBar()
+    {
+        Playerhealthbar.Initialize(_maxHealth);
         UpdateHealthUI();
     }
 
-    public void TakeDamage(float amount)
+    public void TakeDamage(float amount, Vector3 attackPosition)
     {
-        currentHealth -= amount;
+        _currentHealth -= amount;
         UpdateHealthUI();
 
-        if (currentHealth <= 0)
+        if (_currentHealth <= 0)
         {
+            _currentHealth = 0;
             Die();
         }
         else
         {
-            controller.TakeDamage(transform.position);
-            // Invoke the OnTakeDamage event
-            //OnTakeDamage?.Invoke();
+            _TPController.TakeDamage(attackPosition, 5);
         }
     }
 
+
     void UpdateHealthUI()
     {
-        if (healthSlider != null)
+        if (Playerhealthbar != null)
         {
-            healthSlider.value = currentHealth / maxHealth;
+
+            Playerhealthbar.UpdateBar(_currentHealth);
         }
     }
 
@@ -53,20 +76,20 @@ public class PlayerHealth : MonoBehaviour
             Instantiate(deathEffectPrefab, transform.position, transform.rotation);
         }
 
-        if (controller != null)
+        if (_TPController != null)
         {
-            controller.Dying();
-            controller.DisableMovement();
+            _TPController.Dying();
+            _TPController.DisableMovement();
         }
 
     }
 
     public void Heal(float amount)
     {
-        currentHealth += amount;
-        if (currentHealth > maxHealth)
+        _currentHealth += amount;
+        if (_currentHealth > _maxHealth)
         {
-            currentHealth = maxHealth;
+            _currentHealth = _maxHealth;
         }
         UpdateHealthUI();
     }
