@@ -128,9 +128,9 @@ namespace StarterAssets
 
 
         [Header("Knockback")]
-        public float knockbackForce = 10f;
-        public float knockbackDuration = 0.2f;
-        private Vector3 knockbackDirection;
+        private Vector3 _knockbackDirection;
+        private float _knockbackTimeRemaining;
+        private float _knockbackForce;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -181,6 +181,11 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             Attack();
+            if (_knockbackTimeRemaining > 0)
+            {
+                _controller.Move(_knockbackDirection * _knockbackForce * Time.deltaTime);
+                _knockbackTimeRemaining -= Time.deltaTime;
+            }
         }
 
         private void LateUpdate()
@@ -441,7 +446,7 @@ namespace StarterAssets
 
 
         }
-        public void TakeDamage(Vector3 attackPosition)
+        public void TakeDamage(Vector3 attackPosition, float knockbackForce)
         {
             if (_isTakingDamage) return;
             if (Grounded)
@@ -449,24 +454,22 @@ namespace StarterAssets
                 _isTakingDamage = true;
 
                 _animator.SetTrigger(_animIDisTakingDamage);
-                
-                // إضافة تأثير الارتداد
-                knockbackDirection = (transform.position - attackPosition).normalized;
-                StartCoroutine(ApplyKnockback());
+
+                _knockbackDirection = -transform.forward; // الاتجاه العكسي لاتجاه النظر الحالي
+                _knockbackForce = knockbackForce;
+                _knockbackTimeRemaining = 0.5f; // مدة تأثير الارتداد
 
                 StartCoroutine(TakeDamageRoutine());
             }
         }
 
-        private IEnumerator ApplyKnockback()
+
+        private IEnumerator ApplyKnockback(Vector3 direction, float force, float duration)
         {
             float timer = 0;
-
-            while (timer < knockbackDuration)
+            while (timer < duration)
             {
-                // تحريك اللاعب بالاتجاه والسرعة المعطاة
-                transform.position += knockbackDirection * knockbackForce * Time.deltaTime;
-
+                _controller.Move(direction * force * Time.deltaTime);
                 timer += Time.deltaTime;
                 yield return null;
             }

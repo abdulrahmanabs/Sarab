@@ -4957,7 +4957,7 @@ MeshCollider:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 8
+    m_Bits: 136
   m_LayerOverridePriority: 0
   m_IsTrigger: 1
   m_ProvidesContacts: 0
@@ -4978,6 +4978,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcaadabfd5010f458e338e3455bd17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Speed: 20
-  _damage: 10
+  _bulletSpeedShoot: 20
+  _bolletDamage: 10
   _hitEffectPrefab: {fileID: 8125293011081144787, guid: b67ce36390185db41a6c5cd210223f7e, type: 3}

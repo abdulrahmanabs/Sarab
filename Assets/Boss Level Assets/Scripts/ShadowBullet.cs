@@ -2,18 +2,25 @@ using UnityEngine;
 
 public class ShadowBullet : MonoBehaviour
 {
-    public float Speed = 20f;
-    [SerializeField] private float _damage = 10f;
+    [Header("Variables & Constant")]
+    [SerializeField] private float _bulletSpeedShoot = 20f;
+    [SerializeField] private float _bolletDamage = 10f;
+
+    [Space(20)]
+    [Header("Components")]
+    private Rigidbody _bulletRB;
+
+    [Space(20)]
+    [Header("referance")]
     [SerializeField] private GameObject _hitEffectPrefab;
-
-    private Rigidbody rb;
-
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.velocity = transform.forward * Speed;
+        _bulletRB = GetComponent<Rigidbody>();
+        _bulletRB.velocity = transform.forward * _bulletSpeedShoot;
+        Destroy(gameObject, 10);
     }
-
+    public float GetBulletSpeed()
+    { return _bulletSpeedShoot; }
     void OnTriggerEnter(Collider other)
     {
         print(other.tag);
@@ -22,7 +29,7 @@ public class ShadowBullet : MonoBehaviour
             EnemyHealth enemyHealth = other.transform.parent.GetComponent<EnemyHealth>();
             if (enemyHealth != null)
             {
-                enemyHealth.TakeDamage(_damage);
+                enemyHealth.TakeDamage(_bolletDamage);
             }
         }
         if (other.CompareTag("Player"))
@@ -30,7 +37,7 @@ public class ShadowBullet : MonoBehaviour
             PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(_damage);
+                playerHealth.TakeDamage(_bolletDamage, transform.position);
             }
         }
 

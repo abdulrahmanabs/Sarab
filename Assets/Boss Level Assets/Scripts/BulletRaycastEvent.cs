@@ -19,13 +19,14 @@ public class BulletRaycastEvent : MonoBehaviour
             if (bullet != null)
             {
                 Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+                bullet.GetComponent<MeshCollider>().excludeLayers = ~(1 << LayerMask.NameToLayer("Boss"));
                 if (bulletRigidbody != null)
                 {
                     // Clear the current velocity
                     bulletRigidbody.velocity = Vector3.zero;
 
                     // Calculate the new velocity direction (180 degrees from current forward direction)
-                    Vector3 newVelocity = -bullet.transform.forward * bullet.Speed;
+                    Vector3 newVelocity = -bullet.transform.forward * bullet.GetBulletSpeed();
 
                     // Apply the new velocity
                     bulletRigidbody.velocity = newVelocity;

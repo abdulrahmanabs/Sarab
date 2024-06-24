@@ -1,6 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(AudioSource))]
@@ -10,21 +8,44 @@ public class AudioManager : Singleton<AudioManager>
     SerializedDictionary<AudioClipNames, AudioClip> _clips;
 
     AudioSource _audioSource;
+    public AudioSource musicSource;
+    public AudioSource sfxSource;
 
-    public void PlayAudio(AudioClipNames clipName)
-    {
-        if (_clips.ContainsKey(clipName))
-        {
-            _audioSource.PlayOneShot(_clips[clipName]);
-        }
-        else
-        {
-            Debug.LogWarning("Audio clip with name " + clipName + " not found in the dictionary.");
-        }
-    }
 
     public void PlayAudio(AudioClip clip)
     {
         _audioSource.PlayOneShot(clip);
     }
+
+    public void PlayMusic(AudioClip musicClip)
+    {
+        musicSource.clip = musicClip;
+        musicSource.Play();
+    }
+
+    public void PlaySoundEffect(AudioClip sfxClip)
+    {
+        sfxSource.PlayOneShot(sfxClip);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        musicSource.volume = volume;
+    }
+
+    public void SetSFXVolume(float volume)
+    {
+        sfxSource.volume = volume;
+    }
+
+    public void MuteMusic(bool mute)
+    {
+        musicSource.mute = mute;
+    }
+
+    public void MuteSFX(bool mute)
+    {
+        sfxSource.mute = mute;
+    }
+
 }
