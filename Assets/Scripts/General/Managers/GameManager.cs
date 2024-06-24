@@ -1,5 +1,4 @@
 using AYellowpaper.SerializedCollections;
-using Lean.Pool;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.SceneManagement;

@@ -7,13 +7,15 @@ namespace StarterAssets
 {
 	public class StarterAssetsInputs : MonoBehaviour
 	{
+		
 		[Header("Character Input Values")]
 		public Vector2 move;
 		public Vector2 look;
 		public bool jump;
 		public bool sprint;
+        public bool attack; // New attack input
 
-		[Header("Movement Settings")]
+        [Header("Movement Settings")]
 		public bool analogMovement;
 
 		[Header("Mouse Cursor Settings")]
@@ -43,6 +45,10 @@ namespace StarterAssets
 		{
 			SprintInput(value.isPressed);
 		}
+		        public void OnAttack(InputValue value) // New attack input method
+        {
+            AttackInput(value.isPressed);
+        }
 #endif
 
 
@@ -65,8 +71,11 @@ namespace StarterAssets
 		{
 			sprint = newSprintState;
 		}
-		
-		private void OnApplicationFocus(bool hasFocus)
+        public void AttackInput(bool newAttackState) // New attack input handler
+        {
+            attack = newAttackState;
+        }
+        private void OnApplicationFocus(bool hasFocus)
 		{
 			SetCursorState(cursorLocked);
 		}

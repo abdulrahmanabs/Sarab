@@ -5,15 +5,17 @@ TagManager:
   serializedVersion: 2
   tags:
   - CinemachineTarget
+  - Portals
+  - Boss
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Bullet
   - Water
   - UI
-  - Interactables
-  - 
+  - Characters
+  - Boss
   - 
   - 
   - 
