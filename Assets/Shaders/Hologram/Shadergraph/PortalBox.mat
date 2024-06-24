@@ -26,11 +26,11 @@ Material:
     m_Ints: []
     m_Floats:
     - Vector1_4258C632: 0.05
-    - Vector1_B847FAE5: 5
+    - Vector1_B847FAE5: 3.56
     - _QueueControl: 0
     m_Colors:
     - Color_5A29FF9E: {r: 0.25, g: 0.25, b: 0.25, a: 0.16470589}
-    - Color_BB588D2D: {r: 4.237095, g: 0.56207824, b: 0.5545937, a: 0}
+    - Color_BB588D2D: {r: 0.57677716, g: 4.237095, b: 1.5322375, a: 0}
   m_BuildTextureStacks: []
 --- !u!114 &3870441837032139307
 MonoBehaviour:
