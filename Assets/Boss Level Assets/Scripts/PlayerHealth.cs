@@ -1,6 +1,8 @@
 using Microlight.MicroBar;
 using StarterAssets;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 
 public class PlayerHealth : MonoBehaviour
@@ -24,7 +26,7 @@ public class PlayerHealth : MonoBehaviour
     [Space(20)]
     [Header("Referance")]
     [SerializeField] private GameObject deathEffectPrefab;
-
+    [SerializeField] private Animator _animLoader;
 
     private void Awake()
     {
@@ -42,7 +44,7 @@ public class PlayerHealth : MonoBehaviour
         UpdateHealthUI();
     }
 
-    public void TakeDamage(float amount, Vector3 attackPosition)
+    public void TakeDamage(float amount)
     {
         _currentHealth -= amount;
         UpdateHealthUI();
@@ -52,10 +54,7 @@ public class PlayerHealth : MonoBehaviour
             _currentHealth = 0;
             Die();
         }
-        else
-        {
-            _TPController.TakeDamage(attackPosition, 5);
-        }
+
     }
 
 
@@ -79,7 +78,7 @@ public class PlayerHealth : MonoBehaviour
         if (_TPController != null)
         {
             _TPController.Dying();
-            _TPController.DisableMovement();
+
         }
 
     }
@@ -92,5 +91,18 @@ public class PlayerHealth : MonoBehaviour
             _currentHealth = _maxHealth;
         }
         UpdateHealthUI();
+    }
+    public void PLayScene()
+    {
+
+        StartCoroutine("LoadLevel");
+
+    }
+    IEnumerator LoadLevel()
+    {
+        yield return new WaitForSeconds(2.3f);
+        _animLoader.SetTrigger("Start");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("Boos Fight");
     }
 }

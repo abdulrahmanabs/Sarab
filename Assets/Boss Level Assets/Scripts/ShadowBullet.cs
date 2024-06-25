@@ -32,14 +32,7 @@ public class ShadowBullet : MonoBehaviour
                 enemyHealth.TakeDamage(_bolletDamage);
             }
         }
-        if (other.CompareTag("Player"))
-        {
-            PlayerHealth playerHealth = other.gameObject.GetComponent<PlayerHealth>();
-            if (playerHealth != null)
-            {
-                playerHealth.TakeDamage(_bolletDamage, transform.position);
-            }
-        }
+    
 
         // Instantiate hit effect
         if (_hitEffectPrefab != null)
@@ -51,5 +44,10 @@ public class ShadowBullet : MonoBehaviour
         // Destroy the bullet
         Destroy(gameObject);
 
+    }
+    public float GetBulletDamage(){ return _bolletDamage; }
+    public void activeHitEffect()
+    {
+            GameObject hitVFX = Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
     }
 }

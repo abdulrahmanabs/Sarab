@@ -116,7 +116,7 @@ namespace StarterAssets
         private CharacterController _controller;
         private StarterAssetsInputs _input;
         private GameObject _mainCamera;
-
+        private PlayerHealth PlayerHealth;
         private const float _threshold = 0.01f;
 
         private bool _hasAnimator;
@@ -125,12 +125,22 @@ namespace StarterAssets
 
         private bool _canMove = true;
         private bool _canJump = true;
+        private bool _canmoveCam = true;
+        private bool _isTakingDamageInputDisabled = false; // Flag to disable input during damage
 
 
         [Header("Knockback")]
         private Vector3 _knockbackDirection;
         private float _knockbackTimeRemaining;
         private float _knockbackForce;
+
+        public float slowMotionDuration = 5f;
+
+        public float AttackCooldown = 0.5f;
+        private float _attackCooldownTimer = 0f;
+
+        public delegate void PlayerDieEventHandler();
+        public static event PlayerDieEventHandler OnPlayerDie;
         private bool IsCurrentDeviceMouse
         {
             get
@@ -160,6 +170,7 @@ namespace StarterAssets
             _hasAnimator = TryGetComponent(out _animator);
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
+            PlayerHealth = GetComponent<PlayerHealth>();
 #if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
 #else
@@ -181,6 +192,20 @@ namespace StarterAssets
             GroundedCheck();
             Move();
             Attack();
+            Knockback();
+            ManageAttackDuration();
+        }
+
+        private void ManageAttackDuration()
+        {
+            if (_attackCooldownTimer > 0f)
+            {
+                _attackCooldownTimer -= Time.deltaTime;
+            }
+        }
+
+        private void Knockback()
+        {
             if (_knockbackTimeRemaining > 0)
             {
                 _controller.Move(_knockbackDirection * _knockbackForce * Time.deltaTime);
@@ -196,6 +221,7 @@ namespace StarterAssets
         {
             _canMove = false;
             _canJump = false;
+            _canmoveCam = false;
         }
         private void AssignAnimationIDs()
         {
@@ -227,6 +253,7 @@ namespace StarterAssets
 
         private void CameraRotation()
         {
+            if (!_canmoveCam) return;
             // if there is an input and camera position is not fixed
             if (_input.look.sqrMagnitude >= _threshold && !LockCameraPosition)
             {
@@ -248,7 +275,7 @@ namespace StarterAssets
         private void Attack()
         {
             // Check if the attack input is pressed and the player is not already attacking
-            if (_input.attack && !_isAttacking)
+            if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
             {
                 // Check if the player is grounded and not currently in a jump or fall animation
                 if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall))
@@ -256,6 +283,7 @@ namespace StarterAssets
                     // Player is grounded and can attack
                     _isAttacking = true;
                     _animator.SetTrigger(_animIDAttacking);
+                    _attackCooldownTimer = AttackCooldown;
                 }
                 else
                 {
@@ -264,32 +292,7 @@ namespace StarterAssets
                 }
             }
         }
-        private void Attacking()
-        {
-            if (_input.attack && !_isAttacking && Grounded)
-            {
-                _isAttacking = true;
-                _animator.SetTrigger(_animIDAttacking);
 
-                // Perform a raycast from the right hand position in the direction the player is facing
-                RaycastHit hit;
-                if (Physics.Raycast(rightHandTransform.position, transform.forward, out hit, 10))
-                {
-                    // If we hit something, change the direction of the rightHandTransform
-                    rightHandTransform.rotation = Quaternion.LookRotation(-transform.forward, Vector3.up);
-
-                    // Draw a gizmo to visualize the hit point
-                    DebugDrawHitPoint(hit.point);
-                }
-            }
-        }
-
-
-        private void DebugDrawHitPoint(Vector3 point)
-        {
-            Gizmos.color = Color.red;
-            Gizmos.DrawWireSphere(point, 0.1f);
-        }
         public void EndAttack()
         {
             _isAttacking = false;
@@ -297,6 +300,11 @@ namespace StarterAssets
             if (_hasAnimator)
             {
                 _animator.SetBool(_animIDAttacking, false);
+            }
+            if (_input.jump)
+            {
+                _input.jump = false;
+                JumpAndGravity();
             }
         }
         private void Move()
@@ -372,7 +380,11 @@ namespace StarterAssets
 
         private void JumpAndGravity()
         {
-            if (!_canJump) return;
+
+            if (!_canJump || _isAttacking || _isTakingDamage)
+            {
+                return;
+            }
             if (Grounded)
             {
                 // reset the fall timeout timer
@@ -441,28 +453,58 @@ namespace StarterAssets
         }
         public void Dying()
         {
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                // Move the player to the detected ground level
+                transform.position = hit.point;
+            }
+            OnPlayerDie?.Invoke();
+            // Disable movement and root motion
+            DisableMovement();
             _animator.applyRootMotion = true;
+
+            // Disable the player's collider
+            Collider collider = _controller.gameObject.GetComponent<Collider>();
+            collider.enabled = false;
+
+            // Play the dying animation
             _animator.SetBool(_animIDDying, true);
-
-
         }
-        public void TakeDamage(Vector3 attackPosition, float knockbackForce)
+        public void TakeDamage(float amountDamage)
         {
             if (_isTakingDamage) return;
             if (Grounded)
             {
-                _isTakingDamage = true;
-
                 _animator.SetTrigger(_animIDisTakingDamage);
-
-                _knockbackDirection = -transform.forward; // الاتجاه العكسي لاتجاه النظر الحالي
-                _knockbackForce = knockbackForce;
-                _knockbackTimeRemaining = 0.5f; // مدة تأثير الارتداد
-
-                StartCoroutine(TakeDamageRoutine());
             }
+            EndAttack();
+            _isTakingDamageInputDisabled = true;
+            _isTakingDamage = true;
+            PlayerHealth.TakeDamage(amountDamage);
+
+            StartCoroutine(ActivateSlowMotion());
+            ApplyKnockback();
+
+            StartCoroutine(TakeDamageRoutine());
+
         }
 
+        private void ApplyKnockback()
+        {
+            _knockbackDirection = -transform.forward; // الاتجاه العكسي لاتجاه النظر الحالي
+            _knockbackForce = 3f;
+            _knockbackTimeRemaining = 0.5f; // مدة تأثير الارتداد
+        }
+
+        private IEnumerator ActivateSlowMotion()
+        {
+            MoveSpeed = 1.2f;
+            SprintSpeed = 3f;
+            yield return new WaitForSecondsRealtime(slowMotionDuration);
+            MoveSpeed = 2f;
+            SprintSpeed = 5f;
+        }
 
         private IEnumerator ApplyKnockback(Vector3 direction, float force, float duration)
         {
@@ -477,10 +519,25 @@ namespace StarterAssets
 
         private IEnumerator TakeDamageRoutine()
         {
-            yield return new WaitForSeconds(1.3f); // Adjust the duration based on your animation length
-
+            yield return new WaitForSeconds(.01f); // Adjust the duration based on your animation length
+            _isTakingDamageInputDisabled = false;
             _isTakingDamage = false;
+            if (_input.attack && !_isAttacking)
+            {
+                // Clear the attack input flag and execute the attack
+                _input.attack = false;
+                Attack();
+            }
+            else if (_input.jump)
+            {
+                // Clear the jump input flag and execute the jump
+                _input.jump = false;
+                JumpAndGravity();
+            }
 
+            // Ensure to clear any lingering input flags
+            _input.attack = false;
+            _input.jump = false;
         }
         private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
         {
