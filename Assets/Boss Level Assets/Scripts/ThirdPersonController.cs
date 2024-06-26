@@ -150,7 +150,7 @@ namespace StarterAssets
         public Transform firePoint; // Point from where the bullet will be fired
         public float bulletSpeed = 10f; // Speed of the bullet
         public float currentStaminaTimer = 0f;
-        public float staminamax = 9f;
+        public float staminamax = 30f;
         private bool canAttack = false; // Flag to check if the player can attack
         private float staminaTimer = 0f; // Timer to track stamina cooldown
         public Image staminaImage;
