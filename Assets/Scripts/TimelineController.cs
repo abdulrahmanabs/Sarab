@@ -27,7 +27,11 @@ public class TimelineController : MonoBehaviour
             isDoneFirstDecision = true;
         }
         else
+        {
+            print("JOined");
             SceneManage.Instance.LoadBossFightLevel();
+        
+        }
     }
 
 }

@@ -18,7 +18,7 @@ public class SceneManage : Singleton<SceneManage>
 
     public void LoadBossFightLevel()
     {
-        StartCoroutine(LoadLevel("Boss Fight"));
+        StartCoroutine(LoadLevel(2));
     }
     public void LoadMainHubLevel()
     {
@@ -30,6 +30,14 @@ public class SceneManage : Singleton<SceneManage>
         animator.SetTrigger("Start");
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene(levelName);
+
+    }
+
+    public IEnumerator LoadLevel(int levelIndex)
+    {
+        animator.SetTrigger("Start");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(levelIndex);
 
     }
 
