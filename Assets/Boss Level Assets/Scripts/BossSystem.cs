@@ -103,7 +103,7 @@ public class BossSystem : MonoBehaviour
     {
         float angleStep = _spreadAngle / (_numberOfBullets - 1);
         float startingAngle = -_spreadAngle / 2;
-
+        _numberOfBullets = 80;
         for (int i = 0; i < _numberOfBullets; i++)
         {
             float currentAngle = startingAngle + (angleStep * i);
@@ -116,6 +116,7 @@ public class BossSystem : MonoBehaviour
         }
         CheckIdleAnimationAndPlayAttack();
     }
+
     void ShootBullets1()
     {
         StartCoroutine(SpiralShoot());
@@ -157,5 +158,34 @@ public class BossSystem : MonoBehaviour
 
 
     }
+    void ShootBullets3()
+    {
+        int numberOfBullets = 10; // عدد الرصاصات
+        float angleStep = 360f / numberOfBullets; // الزاوية بين كل رصاصة والأخرى
+        float bulletSpeed = 10f; // سرعة الرصاصة
 
+        for (int i = 0; i < numberOfBullets; i++)
+        {
+            float currentAngle = i * angleStep;
+            float radianAngle = currentAngle * Mathf.Deg2Rad;
+
+            // حساب اتجاه إطلاق الرصاصة بناءً على الزاوية
+            Vector3 direction = new Vector3(Mathf.Cos(radianAngle), 0, Mathf.Sin(radianAngle)).normalized;
+
+            // موضع إطلاق الرصاصة
+            Vector3 spawnPosition = _bulletSpawnPoint.position;
+
+            // دوران الرصاصة بحيث تتجه للأمام
+            Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, currentAngle - 90, 0));
+
+            // إنشاء الرصاصة في الموضع المحدد والزاوية المحددة
+            GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, bulletRotation);
+
+            // ضبط خصائص الرصاصة
+            bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction);
+        }
+
+        // التحقق من حالة الانميشن وتشغيل هجوم إذا كان مطلوبًا
+        CheckIdleAnimationAndPlayAttack();
+    }
 }
