@@ -136,7 +136,7 @@ namespace StarterAssets
         private float _knockbackTimeRemaining;
         private float _knockbackForce;
 
-        public float slowMotionDuration = 5f;
+        public float slowMotionDuration = 2f;
 
         public float AttackCooldown = 0.5f;
         private float _attackCooldownTimer = 0f;
