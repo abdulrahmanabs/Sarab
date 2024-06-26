@@ -12,10 +12,30 @@ public class SceneManage : Singleton<SceneManage>
     }
     public void PLayScene()
     {
-
         StartCoroutine("LoadLevel");
 
     }
+
+    public void LoadBossFightLevel()
+    {
+        StartCoroutine(LoadLevel("Boss Fight"));
+    }
+    public void LoadMainHubLevel()
+    {
+        StartCoroutine(LoadLevel("Main Hub matrix"));
+    }
+
+    public IEnumerator LoadLevel(string levelName)
+    {
+        animator.SetTrigger("Start");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene(levelName);
+
+    }
+
+
+
+
     public void MenuScene()
     {
         SceneManager.LoadScene("GamePlayScene");
@@ -26,16 +46,5 @@ public class SceneManage : Singleton<SceneManage>
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("GamePlayScene");
     }
-    public void BossFightScene()
-    {
-        SceneManager.LoadScene("Boos Fight");
-    }
-    public void MainHubScene()
-    {
-        SceneManager.LoadScene("Main Hub matrix");
-    }
-    public void CommingSoonScene()
-    {
-        SceneManager.LoadScene("Comming soon");
-    }
+
 }
