@@ -4108,6 +4108,37 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!1 &1117280995
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1117280996}
+  m_Layer: 0
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1117280996
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1117280995}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: 1.215, z: 0.548}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 710679226}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1133519632 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2070925441746177912, guid: a1a802ecaf6775746bb2a929fb554ad8, type: 3}
@@ -21313,7 +21344,10 @@ PrefabInstance:
     - {fileID: 166294, guid: 48b470c6a762f60438c631f219257520, type: 3}
     - {fileID: 141142, guid: 48b470c6a762f60438c631f219257520, type: 3}
     - {fileID: 156234, guid: 48b470c6a762f60438c631f219257520, type: 3}
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 407374, guid: 48b470c6a762f60438c631f219257520, type: 3}
+      insertIndex: 1
+      addedObject: {fileID: 1117280996}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48b470c6a762f60438c631f219257520, type: 3}
 --- !u!1 &1966979206
@@ -21558,8 +21592,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 418b53493b3557242948219e474b2c22, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bossHealth: 30
+  _maxHealth: 100
+  _currentHealth: 0
   _animator: {fileID: 0}
+  _bossHealthUI: {fileID: 2073896629}
   onBossDeath:
     m_PersistentCalls:
       m_Calls:
@@ -21756,7 +21792,7 @@ GameObject:
   - component: {fileID: 2073896630}
   - component: {fileID: 2073896629}
   m_Layer: 5
-  m_Name: Boss fight
+  m_Name: Boss health
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27286,7 +27322,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1406517026385038578, guid: d30900fc760f07a449cf0053ee13e82c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -63.87
+      value: -66.86
       objectReference: {fileID: 0}
     - target: {fileID: 1406517026385038578, guid: d30900fc760f07a449cf0053ee13e82c, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27411,12 +27447,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 377f2bf96c8ac1c4d939f86348d8886b, type: 3}
   - {fileID: 8300000, guid: 06ed30ff9c7c86b42bc62a49db9d37b1, type: 3}
   - {fileID: 8300000, guid: 75ebb199cf53ca64c8a43c9e1f17917c, type: 3}
-  firePoint: {fileID: 555339811}
+  firePoint: {fileID: 1117280996}
   bulletSpeed: 10
-  staminaCooldown: 10
+  currentStaminaTimer: 4
   staminamax: 4
-  staminaImage: {fileID: 2073896629}
-  shadowBulletPrefab: {fileID: 8493059194077543684, guid: 0a967f5fa6ab40c43bb1b0b1ea9c4499, type: 3}
+  staminaImage: {fileID: 516598911}
+  shadowBulletPrefab: {fileID: 6758679417113362023, guid: d30900fc760f07a449cf0053ee13e82c, type: 3}
 --- !u!143 &4416926083347132233
 CharacterController:
   m_ObjectHideFlags: 0
@@ -27853,6 +27889,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2a3250bb8001bd4bb55dc886d395067, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  postProcess: {fileID: 0}
   fallThreshold: -10
   playerAnimator: {fileID: 0}
   cinemachineCamera: {fileID: 1261390649}

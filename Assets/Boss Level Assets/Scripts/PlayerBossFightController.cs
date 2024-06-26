@@ -19,7 +19,7 @@ public class PlayerBossFightController : MonoBehaviour
     public CinemachineVirtualCamera cinemachineCamera; // Reference to the Cinemachine Virtual Camera
 
     private bool isDead = false;
-    
+
     public delegate void BulletHitPlayerHandler(float damage);
     public static event BulletHitPlayerHandler OnBulletHitPlayer;
     private void Start()
@@ -42,14 +42,17 @@ public class PlayerBossFightController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        ShadowBullet Bullet = other.gameObject.GetComponent<ShadowBullet>();
         if (other.gameObject.CompareTag("Bullet"))
         {
-            _thirdPersonController.TakeDamage(Bullet.GetBulletDamage());
+            Bullet Bullet = other.gameObject.GetComponent<Bullet>();
+            if (Bullet.owner == ShooterWAW.boss)
+            {
+                _thirdPersonController.TakeDamage(Bullet.GetBulletDamage());
 
-            Bullet.activeHitEffect();
-            StartCoroutine(GrayScale());
-            Destroy(other.gameObject, 3);
+                Bullet.activeHitEffect();
+                StartCoroutine(GrayScale());
+                Destroy(other.gameObject, 3);
+            }
         }
     }
     public void Dying()
@@ -69,7 +72,8 @@ public class PlayerBossFightController : MonoBehaviour
         _playerHealth.startloadCommingsoon();
     }
 
-    IEnumerator GrayScale() {
+    IEnumerator GrayScale()
+    {
         ColorAdjustments color;
 
         if (postProcess.profile.TryGet(out color))

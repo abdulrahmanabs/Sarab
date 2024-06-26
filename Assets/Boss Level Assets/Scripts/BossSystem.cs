@@ -109,9 +109,9 @@ public class BossSystem : MonoBehaviour
             float currentAngle = startingAngle + (angleStep * i);
             Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, currentAngle - 90, 0));
 
-
-            GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
-
+            Vector3 direction = _bulletSpawnPoint.position;
+            GameObject bullet = Instantiate(_bulletPrefab, direction, bulletRotation);
+            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
 
         }
         CheckIdleAnimationAndPlayAttack();
@@ -132,8 +132,9 @@ public class BossSystem : MonoBehaviour
             Quaternion bulletRotation = Quaternion.Euler(new Vector3(0, currentAngle - 90, 0));
 
 
-            GameObject bullet = Instantiate(_bulletPrefab, _bulletSpawnPoint.position, bulletRotation);
-
+            Vector3 direction = _bulletSpawnPoint.position;
+            GameObject bullet = Instantiate(_bulletPrefab, direction, bulletRotation);
+            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
             yield return new WaitForSeconds(0.1f);
         }
 
@@ -150,7 +151,8 @@ public class BossSystem : MonoBehaviour
         {
             Vector3 spawnPosition = _bulletSpawnPoint.position + (_bulletSpawnPoint.right * (i * spacing - _lineLength / 2));
             GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, Quaternion.Euler(_bulletSpawnPoint.rotation.x, _bulletSpawnPoint.rotation.y - 90, _bulletSpawnPoint.rotation.z));
-
+            Vector3 direction = spawnPosition;
+            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
         }
 
 

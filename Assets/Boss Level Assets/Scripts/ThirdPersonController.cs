@@ -4,6 +4,7 @@ using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 #endif
 
@@ -145,15 +146,15 @@ namespace StarterAssets
         public List<AudioClip> attackSounds;
         private AudioManager audioManager;
 
-        //[Header("Player attack")]
-        //public Transform firePoint; // Point from where the bullet will be fired
-        //public float bulletSpeed = 10f; // Speed of the bullet
-        //public float staminaCooldown = 4f;
-        //public float staminamax = 4f;
-        //private bool canAttack = true; // Flag to check if the player can attack
-        //private float staminaTimer = 0f; // Timer to track stamina cooldown
-        //public Image staminaImage;
-        //public GameObject shadowBulletPrefab;
+        [Header("Player attack")]
+        public Transform firePoint; // Point from where the bullet will be fired
+        public float bulletSpeed = 10f; // Speed of the bullet
+        public float currentStaminaTimer = 0f;
+        public float staminamax = 9f;
+        private bool canAttack = false; // Flag to check if the player can attack
+        private float staminaTimer = 0f; // Timer to track stamina cooldown
+        public Image staminaImage;
+        public GameObject shadowBulletPrefab;
 
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
@@ -199,31 +200,31 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            //if (staminaImage != null)
-            //{
-            //    staminaImage.fillAmount = 1f; // Stamina starts full
-            //}
+            if (staminaImage != null)
+            {
+                staminaImage.fillAmount = currentStaminaTimer; // Stamina starts full
+            }
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            //if (!canAttack)
-            //{
-            //    staminaTimer += Time.deltaTime;
-            //    staminaImage.fillAmount = staminaTimer / staminaCooldown; // Update the image fill amount
-            //    if (staminaTimer >= staminaCooldown)
-            //    {
-            //        canAttack = true;
+            if (!canAttack)
+            {
+                currentStaminaTimer += Time.deltaTime;
+                staminaImage.fillAmount = currentStaminaTimer / staminamax; // Update the image fill amount
+                if (currentStaminaTimer >= staminamax)
+                {
+                    canAttack = true;
 
-            //        staminaImage.fillAmount = 1f; // Reset the image fill amount
-            //    }
-            //}
+                    staminaImage.fillAmount = 1f; // Reset the image fill amount
+                }
+            }
 
             JumpAndGravity();
             GroundedCheck();
             Move();
-            //if (canAttack)
+
             Attack();
             Knockback();
             ManageAttackDuration();
@@ -307,6 +308,7 @@ namespace StarterAssets
         }
         private void Attack()
         {
+            if (!canAttack) return;
             // Check if the attack input is pressed and the player is not already attacking
             if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
             {
@@ -317,10 +319,10 @@ namespace StarterAssets
                     _isAttacking = true;
                     _animator.SetTrigger(_animIDAttacking);
                     _attackCooldownTimer = AttackCooldown;
-                    //staminaTimer = 0;
-                    //canAttack = false;
+                    currentStaminaTimer = 0;
+                    canAttack = false;
                     PlayRandomAttackSound();
-                    //ShootShadowBullet();
+                    ShootShadowBullet();
 
                     // Reset stamina
 
@@ -333,25 +335,20 @@ namespace StarterAssets
                 }
             }
         }
-        //void ShootShadowBullet()
-        //{
+        void ShootShadowBullet()
+        {
 
-        //    GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
-
-        //    // Get the Rigidbody component
-        //    Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
-
-        //    // Set the initial velocity to zero
-        //    bulletRigidbody.velocity = Vector3.zero;
-
-        //    // Calculate the new velocity direction (180 degrees from the current forward direction)
-        //    Vector3 newVelocity = bullet.transform.forward * bulletSpeed;
-
-        //    // Apply the new velocity
-        //    bulletRigidbody.velocity = newVelocity;
+            GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
 
 
-        //}
+            // Calculate the new velocity direction (180 degrees from the current forward direction)
+            Vector3 DirectionShoot = firePoint.forward * bulletSpeed;
+
+            // Apply the new velocit
+            bullet.GetComponent<Bullet>().SetBulletProb(10f, ShooterWAW.player, DirectionShoot);
+
+
+        }
 
         void PlayRandomAttackSound()
         {
