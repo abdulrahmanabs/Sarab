@@ -21,7 +21,7 @@ public class BulletRaycastEvent : MonoBehaviour
                 Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
                 bullet.GetComponent<MeshCollider>().excludeLayers = ~(1 << LayerMask.NameToLayer("Boss"));
                 if (bulletRigidbody != null)
-                {
+                {   
                     // Clear the current velocity
                     bulletRigidbody.velocity = Vector3.zero;
 

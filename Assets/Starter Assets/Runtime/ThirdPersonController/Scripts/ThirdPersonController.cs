@@ -1,8 +1,10 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 #endif
 
@@ -139,6 +141,21 @@ namespace StarterAssets
         public float AttackCooldown = 0.5f;
         private float _attackCooldownTimer = 0f;
 
+        [Space(20)]
+        [Header("Audiomanage")]
+        public List<AudioClip> attackSounds;
+        private AudioManager audioManager;
+
+        [Header("Player attack")]
+        public Transform firePoint; // Point from where the bullet will be fired
+        public float bulletSpeed = 10f; // Speed of the bullet
+        public float staminaCooldown = 4f;
+        public float staminamax = 4f;
+        private bool canAttack = true; // Flag to check if the player can attack
+        private float staminaTimer = 0f; // Timer to track stamina cooldown
+        public Image staminaSlider;
+        public GameObject shadowBulletPrefab;
+
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
         private bool IsCurrentDeviceMouse
@@ -176,17 +193,34 @@ namespace StarterAssets
 #else
 			Debug.LogError( "Starter Assets package is missing dependencies. Please use Tools/Starter Assets/Reinstall Dependencies to fix it");
 #endif
-
+            audioManager = AudioManager.Instance;
             AssignAnimationIDs();
 
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
+
+            if (staminaSlider != null)
+            {
+                staminaSlider.fillAmount = staminaCooldown / staminamax;
+
+            }
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
+            if (!canAttack)
+            {
+                staminaTimer += Time.deltaTime;
+                staminaSlider.fillAmount = (staminaCooldown - staminaTimer) / staminamax; // Update the slider value
+                if (staminaTimer >= staminaCooldown)
+                {
+                    canAttack = true;
+                    staminaTimer = 0f;
+                    staminaSlider.fillAmount = staminaCooldown / staminamax; // Reset the slider value
+                }
+            }
 
             JumpAndGravity();
             GroundedCheck();
@@ -278,12 +312,18 @@ namespace StarterAssets
             if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
             {
                 // Check if the player is grounded and not currently in a jump or fall animation
-                if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall))
+                if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall) && canAttack)
                 {
                     // Player is grounded and can attack
                     _isAttacking = true;
                     _animator.SetTrigger(_animIDAttacking);
                     _attackCooldownTimer = AttackCooldown;
+                    PlayRandomAttackSound();
+                    ShootShadowBullet();
+
+                    // Reset stamina
+                    canAttack = false;
+                    staminaSlider.fillAmount = 0;
                 }
                 else
                 {
@@ -292,7 +332,32 @@ namespace StarterAssets
                 }
             }
         }
+        void ShootShadowBullet()
+        {
+            // Instantiate the shadow bullet
+            GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
 
+            // Get the Rigidbody component
+            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+
+            // Set the initial velocity to zero
+            bulletRigidbody.velocity = Vector3.zero;
+
+            // Calculate the new velocity direction (180 degrees from the current forward direction)
+            Vector3 newVelocity = -bullet.transform.forward * bulletSpeed;
+
+            // Apply the new velocity
+            bulletRigidbody.velocity = newVelocity;
+        }
+        void PlayRandomAttackSound()
+        {
+            if (attackSounds.Count > 0)
+            {
+                int randomIndex = Random.Range(0, attackSounds.Count);
+                AudioClip attackSound = attackSounds[randomIndex];
+                audioManager.PlaySoundEffect(attackSound);
+            }
+        }
         public void EndAttack()
         {
             _isAttacking = false;

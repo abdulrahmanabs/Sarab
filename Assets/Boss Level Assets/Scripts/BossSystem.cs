@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BossSystem : MonoBehaviour
@@ -11,18 +12,92 @@ public class BossSystem : MonoBehaviour
     private bool isShooting = false;
 
 
+    [Header("Boss Sound Effects")]
+    public List<AudioClip> bossLought;
+
+    public List<AudioClip> bossAttackClips;
 
     [Space(20)]
     [Header("Components")]
-
-
+    [SerializeField] private Animator _animator;
+    private AudioManager audioManager;
 
     [Space(20)]
     [Header("Referance")]
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _bulletSpawnPoint;
+    private bool hasPlayedLought = false; // Boolean flag
 
 
+    bool temp = true;
+    private void Start()
+    {
+        audioManager = AudioManager.Instance;
+        _animator = GetComponent<Animator>();
+    }
+
+    void Update()
+    {
+        if (temp)
+        {
+            CheckIdleAnimationAndPlayLought();
+        }
+    }
+    void CheckIdleAnimationAndPlayLought()
+    {
+        // Check if the current animation state is Idle
+        if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Boss"))
+        {
+            int randomNumber = Random.Range(1, 11);
+            print(randomNumber);
+            if (randomNumber > 5)
+            {
+                temp = false;
+                hasPlayedLought = true;
+                PlayRandomBossLought();
+
+            }
+        }
+        else if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Boss"))
+        {
+            hasPlayedLought = false;
+            temp = true;
+        }
+    }
+    void CheckIdleAnimationAndPlayAttack()
+    {
+        // Check if the current animation state is Idle
+
+        int randomNumber = Random.Range(1, 11);
+        print(randomNumber);
+        if (randomNumber > 5)
+        {
+            PlayRandomBossAttack();
+        }
+
+    }
+
+
+    public void PlayRandomBossLought()
+    {
+        if (audioManager != null && bossLought != null)
+        {
+            int randomIndex = Random.Range(0, bossLought.Count);
+            AudioClip LoughtClip = bossLought[randomIndex];
+            audioManager.PlaySoundEffect(LoughtClip);
+
+        }
+    }
+
+    public void PlayRandomBossAttack()
+    {
+        if (audioManager != null && bossAttackClips != null)
+        {
+            int randomIndex = Random.Range(0, bossAttackClips.Count);
+            AudioClip attackClip = bossAttackClips[randomIndex];
+            audioManager.PlaySoundEffect(attackClip);
+        }
+    }
 
     void ShootBullets()
     {
@@ -39,6 +114,7 @@ public class BossSystem : MonoBehaviour
 
 
         }
+        CheckIdleAnimationAndPlayAttack();
     }
     void ShootBullets1()
     {
@@ -62,11 +138,12 @@ public class BossSystem : MonoBehaviour
         }
 
         isShooting = false;
+        CheckIdleAnimationAndPlayAttack();
     }
     void ShootBullets2()
     {
 
-
+        CheckIdleAnimationAndPlayAttack();
         float spacing = _lineLength / (_numberOfBullets - 1);
 
         for (int i = 0; i < _numberOfBullets; i++)
