@@ -4,7 +4,6 @@ using UnityEngine;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 #endif
 
@@ -146,15 +145,15 @@ namespace StarterAssets
         public List<AudioClip> attackSounds;
         private AudioManager audioManager;
 
-        [Header("Player attack")]
-        public Transform firePoint; // Point from where the bullet will be fired
-        public float bulletSpeed = 10f; // Speed of the bullet
-        public float staminaCooldown = 4f;
-        public float staminamax = 4f;
-        private bool canAttack = true; // Flag to check if the player can attack
-        private float staminaTimer = 0f; // Timer to track stamina cooldown
-        public Image staminaSlider;
-        public GameObject shadowBulletPrefab;
+        //[Header("Player attack")]
+        //public Transform firePoint; // Point from where the bullet will be fired
+        //public float bulletSpeed = 10f; // Speed of the bullet
+        //public float staminaCooldown = 4f;
+        //public float staminamax = 4f;
+        //private bool canAttack = true; // Flag to check if the player can attack
+        //private float staminaTimer = 0f; // Timer to track stamina cooldown
+        //public Image staminaImage;
+        //public GameObject shadowBulletPrefab;
 
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
@@ -200,31 +199,31 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            if (staminaSlider != null)
-            {
-                staminaSlider.fillAmount = staminaCooldown / staminamax;
-
-            }
+            //if (staminaImage != null)
+            //{
+            //    staminaImage.fillAmount = 1f; // Stamina starts full
+            //}
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            if (!canAttack)
-            {
-                staminaTimer += Time.deltaTime;
-                staminaSlider.fillAmount = (staminaCooldown - staminaTimer) / staminamax; // Update the slider value
-                if (staminaTimer >= staminaCooldown)
-                {
-                    canAttack = true;
-                    staminaTimer = 0f;
-                    staminaSlider.fillAmount = staminaCooldown / staminamax; // Reset the slider value
-                }
-            }
+            //if (!canAttack)
+            //{
+            //    staminaTimer += Time.deltaTime;
+            //    staminaImage.fillAmount = staminaTimer / staminaCooldown; // Update the image fill amount
+            //    if (staminaTimer >= staminaCooldown)
+            //    {
+            //        canAttack = true;
+
+            //        staminaImage.fillAmount = 1f; // Reset the image fill amount
+            //    }
+            //}
 
             JumpAndGravity();
             GroundedCheck();
             Move();
+            //if (canAttack)
             Attack();
             Knockback();
             ManageAttackDuration();
@@ -312,18 +311,20 @@ namespace StarterAssets
             if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
             {
                 // Check if the player is grounded and not currently in a jump or fall animation
-                if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall) && canAttack)
+                if (Grounded && !_animator.GetBool(_animIDJump) && !_animator.GetBool(_animIDFreeFall))
                 {
                     // Player is grounded and can attack
                     _isAttacking = true;
                     _animator.SetTrigger(_animIDAttacking);
                     _attackCooldownTimer = AttackCooldown;
+                    //staminaTimer = 0;
+                    //canAttack = false;
                     PlayRandomAttackSound();
-                    ShootShadowBullet();
+                    //ShootShadowBullet();
 
                     // Reset stamina
-                    canAttack = false;
-                    staminaSlider.fillAmount = 0;
+
+
                 }
                 else
                 {
@@ -332,23 +333,26 @@ namespace StarterAssets
                 }
             }
         }
-        void ShootShadowBullet()
-        {
-            // Instantiate the shadow bullet
-            GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
+        //void ShootShadowBullet()
+        //{
 
-            // Get the Rigidbody component
-            Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
+        //    GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
 
-            // Set the initial velocity to zero
-            bulletRigidbody.velocity = Vector3.zero;
+        //    // Get the Rigidbody component
+        //    Rigidbody bulletRigidbody = bullet.GetComponent<Rigidbody>();
 
-            // Calculate the new velocity direction (180 degrees from the current forward direction)
-            Vector3 newVelocity = -bullet.transform.forward * bulletSpeed;
+        //    // Set the initial velocity to zero
+        //    bulletRigidbody.velocity = Vector3.zero;
 
-            // Apply the new velocity
-            bulletRigidbody.velocity = newVelocity;
-        }
+        //    // Calculate the new velocity direction (180 degrees from the current forward direction)
+        //    Vector3 newVelocity = bullet.transform.forward * bulletSpeed;
+
+        //    // Apply the new velocity
+        //    bulletRigidbody.velocity = newVelocity;
+
+
+        //}
+
         void PlayRandomAttackSound()
         {
             if (attackSounds.Count > 0)
