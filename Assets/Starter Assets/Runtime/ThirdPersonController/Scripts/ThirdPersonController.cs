@@ -454,19 +454,13 @@ namespace StarterAssets
         public void Dying()
         {
             RaycastHit hit;
-            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
-            {
-                // Move the player to the detected ground level
-                transform.position = hit.point;
-            }
+
             OnPlayerDie?.Invoke();
             // Disable movement and root motion
             DisableMovement();
             _animator.applyRootMotion = true;
 
-            // Disable the player's collider
-            Collider collider = _controller.gameObject.GetComponent<Collider>();
-            collider.enabled = false;
+
 
             // Play the dying animation
             _animator.SetBool(_animIDDying, true);

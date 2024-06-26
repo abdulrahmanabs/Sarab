@@ -92,7 +92,7 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthUI();
     }
-    public void PLayScene()
+    public void RefightbossScene()
     {
 
         StartCoroutine("LoadLevel");
@@ -104,5 +104,18 @@ public class PlayerHealth : MonoBehaviour
         _animLoader.SetTrigger("Start");
         yield return new WaitForSeconds(1);
         SceneManager.LoadScene("Boos Fight");
+    }
+    public void startloadCommingsoon()
+    {
+
+        StartCoroutine("LoadnextLevel");
+
+    }
+    IEnumerator LoadnextLevel()
+    {
+        yield return new WaitForSeconds(2.3f);
+        _animLoader.SetTrigger("Start");
+        yield return new WaitForSeconds(1);
+        SceneManager.LoadScene("Comming soon");
     }
 }

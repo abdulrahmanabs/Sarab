@@ -1,9 +1,10 @@
 using UnityEngine;
-
+using UnityEngine.Events;
 public class EnemyHealth : MonoBehaviour
 {
     [SerializeField] private float _bossHealth = 100f;
     [SerializeField] private Animator _animator;
+    public UnityEvent onBossDeath;
     private void Start()
     {
         _animator = GetComponent<Animator>();
@@ -17,7 +18,8 @@ public class EnemyHealth : MonoBehaviour
             _animator.applyRootMotion = true;
             _animator.SetBool("Die", true);
             _bossHealth = 0;
-            Die();
+
+            onBossDeath.Invoke();
         }
         else
         {
@@ -25,8 +27,5 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    void Die()
-    {
-        //Destroy(gameObject);
-    }
+
 }
