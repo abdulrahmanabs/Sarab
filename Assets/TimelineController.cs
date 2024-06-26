@@ -1,19 +1,18 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using UnityEngine.SceneManagement;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Playables;
-using UnityEngine.Timeline;
-using UnityEngine.Windows;
+
 public class TimelineController : MonoBehaviour
 {
     public PlayableDirector timeLine;
     [SerializeField] PlayerInput abo_hamdi;
 
 
+    bool isDoneFirstDecision = false;
+
     // Start is called before the first frame update
-    void Start()
+    void OnEnable()
     {
         abo_hamdi.actions["Interact"].performed += onInteract;
         timeLine = GetComponent<PlayableDirector>();
@@ -22,7 +21,13 @@ public class TimelineController : MonoBehaviour
 
     private void onInteract(InputAction.CallbackContext context)
     {
-        timeLine.Resume();
+        if (!isDoneFirstDecision)
+        {
+            timeLine.Resume();
+            isDoneFirstDecision = true;
+        }
+        else
+            SceneManage.Instance.LoadBossFightLevel();
     }
 
 }
