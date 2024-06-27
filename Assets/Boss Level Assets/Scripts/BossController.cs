@@ -29,7 +29,6 @@ public class BossController : MonoBehaviour
 
     private void PlayHappyAnimation()
     {
-        _meshCollider.convex = false;
         _animator.SetTrigger(_animIDHappy);
     }
     private void OnTriggerEnter(Collider other)

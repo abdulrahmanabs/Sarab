@@ -18,11 +18,16 @@ public class SceneManage : Singleton<SceneManage>
 
     public void LoadBossFightLevel()
     {
+        
         StartCoroutine(LoadLevel(2));
+        PlayerPrefs.SetInt("UnlockedLevel", 2);
     }
-    public void LoadMainHubLevel()
+    public void PlayButton()
     {
-        StartCoroutine(LoadLevel("Main Hub matrix"));
+        if (PlayerPrefs.GetInt("UnlockedLevel", 1) == 1)
+            StartCoroutine(LoadLevel("Main Hub matrix"));
+        else
+            LoadBossFightLevel();
     }
 
     public IEnumerator LoadLevel(string levelName)
@@ -42,6 +47,10 @@ public class SceneManage : Singleton<SceneManage>
     }
 
 
+    public void ReseteGame()
+    {
+        PlayerPrefs.SetInt("UnlockedLevel", 1);
+    }
 
 
     public void MenuScene()

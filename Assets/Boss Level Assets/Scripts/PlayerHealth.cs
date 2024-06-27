@@ -92,12 +92,12 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthUI();
     }
-    public void RefightbossScene()
-    {
+    //public void RefightbossScene()
+    //{
 
-        StartCoroutine("LoadLevel");
+    //    StartCoroutine("LoadLevel");
 
-    }
+    //}
     IEnumerator LoadLevel()
     {
         yield return new WaitForSeconds(2.3f);

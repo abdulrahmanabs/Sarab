@@ -36,6 +36,7 @@ public class PlayerBossFightController : MonoBehaviour
     {
         if (transform.position.y < fallThreshold && !isDead)
         {
+            print("IS DYING");
             Dying();
         }
     }
