@@ -9787,6 +9787,7 @@ GameObject:
   - component: {fileID: 5657569139890370169}
   - component: {fileID: 3570298464573929186}
   - component: {fileID: 6346860857038283351}
+  - component: {fileID: 2786633714377670204}
   m_Layer: 0
   m_Name: Sparks
   m_TagString: Untagged
@@ -14664,6 +14665,20 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &2786633714377670204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6351839197948302590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f13474093d5e96142b32136ddb5a8a14, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyParent: 1
+  DestroyDelay: 2.5
 --- !u!1 &8125293011081144787
 GameObject:
   m_ObjectHideFlags: 0
@@ -14673,6 +14688,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1400812082226886769}
+  - component: {fileID: 410693984763931045}
   m_Layer: 0
   m_Name: ExplosionFBX
   m_TagString: Untagged
@@ -14698,3 +14714,16 @@ Transform:
   - {fileID: 7001720736689181137}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &410693984763931045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8125293011081144787}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 82e3ada621e1cdf40a6737d2bbe3ba05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DestroyAfter: 1

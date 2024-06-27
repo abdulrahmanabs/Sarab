@@ -9,6 +9,7 @@ TagManager:
   - Boss
   - Bullet
   - Ground
+  - DeathBoundry
   layers:
   - Default
   - TransparentFX

@@ -1,9 +1,8 @@
 using Cinemachine;
 using StarterAssets;
-using System.Collections;
 using UnityEngine;
 using UnityEngine.Rendering;
-using UnityEngine.Rendering.Universal;
+
 
 
 public class PlayerBossFightController : MonoBehaviour
@@ -50,7 +49,6 @@ public class PlayerBossFightController : MonoBehaviour
                 _thirdPersonController.TakeDamage(Bullet.GetBulletDamage());
 
                 Bullet.activeHitEffect();
-                StartCoroutine(GrayScale());
                 Destroy(other.gameObject, 3);
             }
         }
@@ -72,48 +70,5 @@ public class PlayerBossFightController : MonoBehaviour
         _playerHealth.startloadCommingsoon();
     }
 
-    IEnumerator GrayScale()
-    {
-        ColorAdjustments color;
 
-        if (postProcess.profile.TryGet(out color))
-        {
-            float startSaturation = color.saturation.value;
-            float targetSaturation = -100f;
-            float duration = 2f;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / duration);
-                color.saturation.value = Mathf.Lerp(startSaturation, targetSaturation, t);
-                yield return null;
-            }
-
-            // Ensure the final value is set accurately
-            color.saturation.value = targetSaturation;
-        }
-
-        yield return new WaitForSeconds(2);
-
-        if (postProcess.profile.TryGet(out color))
-        {
-            float startSaturation = color.saturation.value;
-            float targetSaturation = 0f;
-            float duration = .25f;
-            float elapsedTime = 0f;
-
-            while (elapsedTime < duration)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = Mathf.Clamp01(elapsedTime / duration);
-                color.saturation.value = Mathf.Lerp(startSaturation, targetSaturation, t);
-                yield return null;
-            }
-
-            // Ensure the final value is set accurately
-            color.saturation.value = targetSaturation;
-        }
-    }
 }

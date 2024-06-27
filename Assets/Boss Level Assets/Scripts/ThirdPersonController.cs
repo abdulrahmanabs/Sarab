@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.UI;
 
 #endif
@@ -81,6 +83,9 @@ namespace StarterAssets
         [Tooltip("For locking the camera position on all axis")]
         public bool LockCameraPosition = false;
 
+        [Header("Player attack")]
+        [SerializeField] Volume postProcess;
+
         // cinemachine
         private float _cinemachineTargetYaw;
         private float _cinemachineTargetPitch;
@@ -155,6 +160,7 @@ namespace StarterAssets
         private float staminaTimer = 0f; // Timer to track stamina cooldown
         public Image staminaImage;
         public GameObject shadowBulletPrefab;
+        private bool isSlowMotion;
 
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
@@ -543,13 +549,63 @@ namespace StarterAssets
             _isTakingDamage = true;
             PlayerHealth.TakeDamage(amountDamage);
 
-            StartCoroutine(ActivateSlowMotion());
+            if (!isSlowMotion)
+            {
+                isSlowMotion = true;
+                StartCoroutine(ActivateSlowMotion());
+                StartCoroutine(GrayScale());
+            }
             ApplyKnockback();
-
             StartCoroutine(TakeDamageRoutine());
 
         }
 
+
+        IEnumerator GrayScale()
+        {
+          
+            ColorAdjustments color;
+
+            if (postProcess.profile.TryGet(out color))
+            {
+                float startSaturation = color.saturation.value;
+                float targetSaturation = -100f;
+                float duration = 2f;
+                float elapsedTime = 0f;
+
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+                    color.saturation.value = Mathf.Lerp(startSaturation, targetSaturation, t);
+                    yield return null;
+                }
+
+                // Ensure the final value is set accurately
+                color.saturation.value = targetSaturation;
+            }
+
+           // yield return new WaitForSeconds(slowMotionDuration);
+
+            if (postProcess.profile.TryGet(out color))
+            {
+                float startSaturation = color.saturation.value;
+                float targetSaturation = 0f;
+                float duration = .25f;
+                float elapsedTime = 0f;
+
+                while (elapsedTime < duration)
+                {
+                    elapsedTime += Time.deltaTime;
+                    float t = Mathf.Clamp01(elapsedTime / duration);
+                    color.saturation.value = Mathf.Lerp(startSaturation, targetSaturation, t);
+                    yield return null;
+                }
+
+                // Ensure the final value is set accurately
+                color.saturation.value = targetSaturation;
+            }
+        }
         private void ApplyKnockback()
         {
             _knockbackDirection = -transform.forward; // الاتجاه العكسي لاتجاه النظر الحالي
@@ -559,11 +615,15 @@ namespace StarterAssets
 
         private IEnumerator ActivateSlowMotion()
         {
+            
             MoveSpeed = 1.2f;
             SprintSpeed = 3f;
+
             yield return new WaitForSecondsRealtime(slowMotionDuration);
             MoveSpeed = 2f;
             SprintSpeed = 5f;
+            isSlowMotion = false;
+
         }
 
         private IEnumerator ApplyKnockback(Vector3 direction, float force, float duration)

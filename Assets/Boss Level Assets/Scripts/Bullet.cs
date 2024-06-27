@@ -8,6 +8,7 @@ public class Bullet : MonoBehaviour
     [SerializeField] private float _bulletSpeedShoot = 20f;
     [SerializeField] private float _bolletDamage = 10f;
     private Vector3 _direction;
+
     public ShooterWAW owner;
     [Space(20)]
     [Header("Components")]
@@ -16,17 +17,29 @@ public class Bullet : MonoBehaviour
     [Space(20)]
     [Header("referance")]
     [SerializeField] private GameObject _hitEffectPrefab;
-    void Start()
+
+    [Space(20)]
+    [Header("TrailRenderer Stuff")]
+    private TrailRenderer tr;
+    [SerializeField] Gradient playerGradient;
+    [SerializeField] Gradient bossGradient;
+    void Awake()
     {
         _bulletRB = GetComponent<Rigidbody>();
-
-        Destroy(gameObject, 10);
+        tr = GetComponent<TrailRenderer>();
+        Destroy(gameObject, 8);
     }
     public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction)
     {
         _bolletDamage = damage;
         this.owner = owner;
         _direction = direction;
+
+        if (owner == ShooterWAW.player)
+            tr.colorGradient = playerGradient;
+        else
+            tr.colorGradient = bossGradient;
+
     }
     void Update()
     {
@@ -37,20 +50,22 @@ public class Bullet : MonoBehaviour
     { return _bulletSpeedShoot; }
     void OnTriggerEnter(Collider other)
     {
+
         // Instantiate hit effect
         if (_hitEffectPrefab != null)
         {
             GameObject hitVFX = Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
-            Destroy(hitVFX, 6);
+            Destroy(hitVFX, 3);
         }
-
-        // Destroy the bullet
-        Destroy(gameObject);
+        if(other.gameObject.CompareTag("DeathBoundry"))
+            Destroy(gameObject);
 
     }
     public float GetBulletDamage() { return _bolletDamage; }
     public void activeHitEffect()
     {
-        GameObject hitVFX = Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
+        Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
     }
+
+
 }

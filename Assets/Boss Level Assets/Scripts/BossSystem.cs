@@ -49,7 +49,6 @@ public class BossSystem : MonoBehaviour
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Boss"))
         {
             int randomNumber = Random.Range(1, 11);
-            print(randomNumber);
             if (randomNumber > 5)
             {
                 temp = false;
@@ -69,10 +68,9 @@ public class BossSystem : MonoBehaviour
         // Check if the current animation state is Idle
 
         int randomNumber = Random.Range(1, 11);
-        print(randomNumber);
         if (randomNumber > 5)
         {
-            PlayRandomBossAttack();
+            PlayRandomBossSound();
         }
 
     }
@@ -89,7 +87,7 @@ public class BossSystem : MonoBehaviour
         }
     }
 
-    public void PlayRandomBossAttack()
+    public void PlayRandomBossSound()
     {
         if (audioManager != null && bossAttackClips != null)
         {
