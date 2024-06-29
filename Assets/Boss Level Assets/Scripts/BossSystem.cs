@@ -103,7 +103,21 @@ public class BossSystem : MonoBehaviour
             audioManager.PlaySoundEffect(attackClip);
         }
     }
+    public void ShootRandomPattern()
+    {
+        // تعريف قائمة الدوال
+        List<System.Action> shootPatterns = new List<System.Action> {
+            ShootBullets,
+            ShootBullets1,
+            //ShootBullets2,
+            ShootBullets3,
+            ShootBulletsWave
+        };
 
+        // اختيار دالة عشوائية
+        int randomIndex = Random.Range(0, shootPatterns.Count);
+        shootPatterns[randomIndex]();
+    }
     void ShootBullets()
     {
         float angleStep = _spreadAngle / (_numberOfBullets - 1);
@@ -209,7 +223,7 @@ public class BossSystem : MonoBehaviour
                 float yOffset = Mathf.Sin((float)i / waveWidth * Mathf.PI * 2) * waveHeight / 2; // إزاحة على المحور Y
 
                 Vector3 spawnPosition = _bulletSpawnPoint.position + new Vector3(xOffset, 0, yOffset);
-                spawnPosition.y = spawnPosition.y - 2f;
+                spawnPosition.y = spawnPosition.y - 0.5f;
                 Quaternion bulletRotation = Quaternion.Euler(_bulletSpawnPoint.rotation.x, _bulletSpawnPoint.rotation.y - 90, _bulletSpawnPoint.rotation.z);
 
                 GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, bulletRotation);

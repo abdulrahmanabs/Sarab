@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Rendering;
 
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
@@ -154,13 +155,10 @@ namespace StarterAssets
         [Header("Player attack")]
         public Transform firePoint; // Point from where the bullet will be fired
         public float bulletSpeed = 10f; // Speed of the bullet
-        public float currentStaminaTimer = 0f;
-        public float staminamax = 30f;
-        private bool canAttack = false; // Flag to check if the player can attack
-        private float staminaTimer = 0f; // Timer to track stamina cooldown
-        public Image staminaImage;
         public GameObject shadowBulletPrefab;
         private bool isSlowMotion;
+        public ManageStamina Stamina;
+
 
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
@@ -206,26 +204,17 @@ namespace StarterAssets
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
 
-            if (staminaImage != null)
-            {
-                staminaImage.fillAmount = currentStaminaTimer; // Stamina starts full
-            }
+
         }
 
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            if (!canAttack)
+            if (!Stamina.canAttack)
             {
-                currentStaminaTimer += Time.deltaTime;
-                staminaImage.fillAmount = currentStaminaTimer / staminamax; // Update the image fill amount
-                _input.attack = false;
-                if (currentStaminaTimer >= staminamax)
-                {
-                    canAttack = true;
 
-                    staminaImage.fillAmount = 1f; // Reset the image fill amount
-                }
+                _input.attack = false;
+
             }
 
             JumpAndGravity();
@@ -317,7 +306,7 @@ namespace StarterAssets
         {
 
             firePoint.forward = _mainCamera.transform.forward;
-            if (!canAttack) return;
+            if (!Stamina.canAttack) return;
             // Check if the attack input is pressed and the player is not already attacking
             if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
             {
@@ -328,12 +317,12 @@ namespace StarterAssets
                     _isAttacking = true;
                     _animator.SetTrigger(_animIDAttacking);
                     _attackCooldownTimer = AttackCooldown;
-                    currentStaminaTimer = 0;
-                    canAttack = false;
+                    Stamina.currentStaminaTimer = 0;
+                    Stamina.canAttack = false;
                     PlayRandomAttackSound();
                     ShootShadowBullet();
                     transform.forward = firePoint.forward;
-                    // Reset stamina
+
 
 
                 }
@@ -528,17 +517,47 @@ namespace StarterAssets
         }
         public void Dying()
         {
-            RaycastHit hit;
+            float maxDistance = 100f;
+            Vector3 direction = Vector3.down;
+            int layerMask = LayerMask.GetMask("Ground");
 
+            // رسم الراي كاست في المشهد للتصحيح
+            Debug.DrawRay(transform.position, direction * maxDistance, Color.red);
+
+            RaycastHit hit;
+            if (Physics.Raycast(transform.position, Vector3.down, out hit, Mathf.Infinity, LayerMask.GetMask("Ground")))
+            {
+                // Move the player to the detected ground level
+                transform.position = hit.point;
+            }
+
+            _controller.enabled = false;
             OnPlayerDie?.Invoke();
             // Disable movement and root motion
             DisableMovement();
+            _input.enabled = false;
             _animator.applyRootMotion = true;
 
 
 
             // Play the dying animation
             _animator.SetBool(_animIDDying, true);
+        }
+        public void FallingDying()
+        {
+
+
+
+            OnPlayerDie?.Invoke();
+            // Disable movement and root motion
+            DisableMovement();
+            _input.enabled = false;
+            _animator.applyRootMotion = true;
+
+            PlayerHealth.RefightbossScene();
+
+            // Play the dying animation
+            // _animator.SetBool(_animIDDying, true);
         }
         public void TakeDamage(float amountDamage)
         {

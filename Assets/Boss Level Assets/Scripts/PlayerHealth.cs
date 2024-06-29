@@ -56,7 +56,14 @@ public class PlayerHealth : MonoBehaviour
         }
 
     }
+    public void FallingDamage()
+    {
+        _currentHealth= 0;
+        UpdateHealthUI();
 
+        _TPController.FallingDying();
+
+    }
 
     void UpdateHealthUI()
     {
@@ -92,12 +99,12 @@ public class PlayerHealth : MonoBehaviour
         }
         UpdateHealthUI();
     }
-    //public void RefightbossScene()
-    //{
+    public void RefightbossScene()
+    {
 
-    //    StartCoroutine("LoadLevel");
+        StartCoroutine("LoadLevel");
 
-    //}
+    }
     IEnumerator LoadLevel()
     {
         yield return new WaitForSeconds(2.3f);
