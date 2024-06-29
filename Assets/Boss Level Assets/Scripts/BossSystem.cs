@@ -38,45 +38,36 @@ public class BossSystem : MonoBehaviour
 
     void Update()
     {
-        if (temp)
-        {
-            CheckIdleAnimationAndPlayLought();
-        }
+
+
+        CheckIdleAnimationAndPlayLought();
+
     }
     void CheckIdleAnimationAndPlayLought()
     {
+
         // Check if the current animation state is Idle
         if (_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Boss"))
         {
-            int randomNumber = Random.Range(1, 11);
-            if (randomNumber > 5)
+            if (temp)
             {
                 temp = false;
-                hasPlayedLought = true;
-                PlayRandomBossLought();
+                int randomNumber = Random.Range(1, 11);
+                print(randomNumber);
+                if (randomNumber > 5)
+                {
+                    StartCoroutine("PlayRandomBossLought");
 
+                }
             }
+
         }
-        else if (!_animator.GetCurrentAnimatorStateInfo(0).IsName("Idle Boss"))
+        else
         {
-            hasPlayedLought = false;
             temp = true;
         }
     }
-    void CheckIdleAnimationAndPlayAttack()
-    {
-        // Check if the current animation state is Idle
-
-        int randomNumber = Random.Range(1, 11);
-        if (randomNumber > 5)
-        {
-            PlayRandomBossSound();
-        }
-
-    }
-
-
-    public void PlayRandomBossLought()
+    IEnumerator PlayRandomBossLought()
     {
         if (audioManager != null && bossLought != null)
         {
@@ -85,9 +76,25 @@ public class BossSystem : MonoBehaviour
             audioManager.PlaySoundEffect(LoughtClip);
 
         }
+        yield return new WaitForSeconds(1.5f);
+        temp = true;
+    }
+    void CheckIdleAnimationAndPlayAttack()
+    {
+        // Check if the current animation state is Idle
+
+        int randomNumber = Random.Range(1, 11);
+
+        if (randomNumber > 5)
+        {
+            PlayRandomBossAttack();
+        }
+
     }
 
-    public void PlayRandomBossSound()
+
+
+    public void PlayRandomBossAttack()
     {
         if (audioManager != null && bossAttackClips != null)
         {
@@ -96,7 +103,21 @@ public class BossSystem : MonoBehaviour
             audioManager.PlaySoundEffect(attackClip);
         }
     }
+    public void ShootRandomPattern()
+    {
+        // تعريف قائمة الدوال
+        List<System.Action> shootPatterns = new List<System.Action> {
+            ShootBullets,
+            ShootBullets1,
+            //ShootBullets2,
+            ShootBullets3,
+            ShootBulletsWave
+        };
 
+        // اختيار دالة عشوائية
+        int randomIndex = Random.Range(0, shootPatterns.Count);
+        shootPatterns[randomIndex]();
+    }
     void ShootBullets()
     {
         float angleStep = _spreadAngle / (_numberOfBullets - 1);
@@ -181,6 +202,36 @@ public class BossSystem : MonoBehaviour
 
             // ضبط خصائص الرصاصة
             bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction);
+        }
+
+        // التحقق من حالة الانميشن وتشغيل هجوم إذا كان مطلوبًا
+        CheckIdleAnimationAndPlayAttack();
+    }
+    void ShootBulletsWave()
+    {
+        // إعدادات الرصاصات
+        int waveHeight = 20; // ارتفاع الموجة
+        int waveWidth = 40; // عرض الموجة
+        float bulletSpeed = 10f; // سرعة الرصاصة
+
+        for (int i = 0; i < waveWidth; i++)
+        {
+            for (int j = 0; j < waveHeight; j++)
+            {
+                // حساب موضع إطلاق الرصاصة بناءً على موقع الموجة
+                float xOffset = (i - waveWidth / 2) * 0.5f; // إزاحة على المحور X
+                float yOffset = Mathf.Sin((float)i / waveWidth * Mathf.PI * 2) * waveHeight / 2; // إزاحة على المحور Y
+
+                Vector3 spawnPosition = _bulletSpawnPoint.position + new Vector3(xOffset, 0, yOffset);
+                spawnPosition.y = spawnPosition.y - 0.5f;
+                Quaternion bulletRotation = Quaternion.Euler(_bulletSpawnPoint.rotation.x, _bulletSpawnPoint.rotation.y - 90, _bulletSpawnPoint.rotation.z);
+
+                GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, bulletRotation);
+                Vector3 direction = _bulletSpawnPoint.forward;
+
+                // ضبط خصائص الرصاصة
+                bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction);
+            }
         }
 
         // التحقق من حالة الانميشن وتشغيل هجوم إذا كان مطلوبًا
