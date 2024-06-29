@@ -23,11 +23,13 @@ public class Bullet : MonoBehaviour
     private TrailRenderer tr;
     [SerializeField] Gradient playerGradient;
     [SerializeField] Gradient bossGradient;
+    [SerializeField] MeshRenderer meshRenderer;
     void Awake()
     {
         _bulletRB = GetComponent<Rigidbody>();
         tr = GetComponent<TrailRenderer>();
-        Destroy(gameObject, 8);
+        meshRenderer = GetComponent<MeshRenderer>();
+        Destroy(gameObject, 4);
     }
     public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction)
     {
@@ -36,10 +38,15 @@ public class Bullet : MonoBehaviour
         _direction = direction;
 
         if (owner == ShooterWAW.player)
+        {
             tr.colorGradient = playerGradient;
+            meshRenderer.material.color = Color.white;
+        }
         else
+        {
             tr.colorGradient = bossGradient;
-
+            meshRenderer.material.color = Color.black;
+        }
     }
     void Update()
     {
@@ -57,7 +64,7 @@ public class Bullet : MonoBehaviour
             GameObject hitVFX = Instantiate(_hitEffectPrefab, transform.position, transform.rotation);
             Destroy(hitVFX, 3);
         }
-        if(other.gameObject.CompareTag("DeathBoundry"))
+        if (other.gameObject.CompareTag("DeathBoundry"))
             Destroy(gameObject);
 
     }

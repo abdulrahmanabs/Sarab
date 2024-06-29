@@ -15,18 +15,22 @@ public class PlayerBossFightController : MonoBehaviour
 
     public float fallThreshold = -10f; // Height limit
     public Animator playerAnimator; // Reference to the player's Animator component
-    public CinemachineVirtualCamera cinemachineCamera; // Reference to the Cinemachine Virtual Camera
-
+    public CinemachineVirtualCamera thirdPersonCamera; // Reference to the Cinemachine Virtual Camera
+    public CinemachineVirtualCamera topDownCamera;
     private bool isDead = false;
 
     public delegate void BulletHitPlayerHandler(float damage);
     public static event BulletHitPlayerHandler OnBulletHitPlayer;
+    private Animator _animator;
+    private CharacterController _characterController;
     private void Start()
     {
 
         _playerHealth = GetComponent<PlayerHealth>();
         _thirdPersonController = GetComponent<ThirdPersonController>();
+        _characterController = GetComponent<CharacterController>();
         playerAnimator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
     }
     void Update()
     {
@@ -60,13 +64,22 @@ public class PlayerBossFightController : MonoBehaviour
         _playerHealth.TakeDamage(100);
         isDead = true;
 
-        cinemachineCamera.enabled = false;
+        thirdPersonCamera.Priority = 0;
+        topDownCamera.Priority = 10;
+
+        // Set the top-down camera to a fixed position above the player
+        topDownCamera.Follow = null;
+
+        //topDownCamera.transform.LookAt(this.gameObject.transform);
 
         // Debug log for confirmation
         Debug.Log("Player has fallen and died.");
     }
     public void OnBossDeath()
-    {
+    {   
+        //_animator.Play("Idle");
+        //_characterController.enabled = false;
+
         Debug.Log("The boss has died!");
         _playerHealth.startloadCommingsoon();
     }

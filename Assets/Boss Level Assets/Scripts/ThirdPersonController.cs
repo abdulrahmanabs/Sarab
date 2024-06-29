@@ -219,6 +219,7 @@ namespace StarterAssets
             {
                 currentStaminaTimer += Time.deltaTime;
                 staminaImage.fillAmount = currentStaminaTimer / staminamax; // Update the image fill amount
+                _input.attack = false;
                 if (currentStaminaTimer >= staminamax)
                 {
                     canAttack = true;
@@ -314,6 +315,8 @@ namespace StarterAssets
         }
         private void Attack()
         {
+
+            firePoint.forward = _mainCamera.transform.forward;
             if (!canAttack) return;
             // Check if the attack input is pressed and the player is not already attacking
             if (_input.attack && !_isAttacking && _attackCooldownTimer <= 0f && !_isTakingDamageInputDisabled)
@@ -329,7 +332,7 @@ namespace StarterAssets
                     canAttack = false;
                     PlayRandomAttackSound();
                     ShootShadowBullet();
-
+                    transform.forward = firePoint.forward;
                     // Reset stamina
 
 
@@ -563,7 +566,7 @@ namespace StarterAssets
 
         IEnumerator GrayScale()
         {
-          
+
             ColorAdjustments color;
 
             if (postProcess.profile.TryGet(out color))
@@ -585,7 +588,7 @@ namespace StarterAssets
                 color.saturation.value = targetSaturation;
             }
 
-           // yield return new WaitForSeconds(slowMotionDuration);
+            // yield return new WaitForSeconds(slowMotionDuration);
 
             if (postProcess.profile.TryGet(out color))
             {
@@ -615,7 +618,7 @@ namespace StarterAssets
 
         private IEnumerator ActivateSlowMotion()
         {
-            
+
             MoveSpeed = 1.2f;
             SprintSpeed = 3f;
 
