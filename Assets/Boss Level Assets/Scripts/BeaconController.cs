@@ -6,27 +6,21 @@ public class BeaconController : MonoBehaviour
     public GameObject torch2;
     public Light torchLight1;
     public Light torchLight2;
-    public bool isBeaconLit = false;
+    public bool isBeaconLit = true;
     public float rotationSpeed = 10f; // سرعة الدوران
 
     void Start()
     {
-        UpdateTorchState();
+        //UpdateTorchState();
     }
 
     void Update()
     {
-        // يمكن هنا إضافة أي شروط أو أحداث لتشغيل وإطفاء الشعلة
-        if (Input.GetKeyDown(KeyCode.L)) // مثال: اضغط المفتاح L لتشغيل وإطفاء الشعلة
-        {
-            ToggleBeacon();
-        }
 
-        // تدوير المصابيح إذا كانت الشعلة مشتعلة
-        if (isBeaconLit)
-        {
+
+     
             RotateTorches();
-        }
+        
     }
 
     public void ToggleBeacon()

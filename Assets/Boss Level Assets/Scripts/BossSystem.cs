@@ -53,10 +53,10 @@ public class BossSystem : MonoBehaviour
             {
                 temp = false;
                 int randomNumber = Random.Range(1, 11);
+
                 if (randomNumber > 5)
                 {
-                    StartCoroutine(nameof(PlayRandomBossLought));
-                    
+                    StartCoroutine("PlayRandomBossLought");
 
                 }
             }
@@ -210,8 +210,8 @@ public class BossSystem : MonoBehaviour
     void ShootBulletsWave()
     {
         // إعدادات الرصاصات
-        int waveHeight = 20; // ارتفاع الموجة
-        int waveWidth = 40; // عرض الموجة
+        int waveHeight = 5; // ارتفاع الموجة
+        int waveWidth = 10; // عرض الموجة
         float bulletSpeed = 10f; // سرعة الرصاصة
 
         for (int i = 0; i < waveWidth; i++)
@@ -230,7 +230,7 @@ public class BossSystem : MonoBehaviour
                 Vector3 direction = _bulletSpawnPoint.forward;
 
                 // ضبط خصائص الرصاصة
-                bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction);
+                bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction, 100f);
             }
         }
 

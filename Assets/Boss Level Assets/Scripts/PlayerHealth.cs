@@ -15,7 +15,7 @@ public class PlayerHealth : MonoBehaviour
     [Space(20)]
     [Header("Components")]
     private ThirdPersonController _TPController;
-
+    private SkinnedMeshRenderer _meshRenderer;
 
 
     [Space(20)]
@@ -27,14 +27,19 @@ public class PlayerHealth : MonoBehaviour
     [Header("Referance")]
     [SerializeField] private GameObject deathEffectPrefab;
     [SerializeField] private Animator _animLoader;
-
+    [SerializeField] private Material _deathMaterial;
     private void Awake()
     {
         _currentHealth = _maxHealth;
     }
     void Start()
     {
+
         _TPController = GetComponent<ThirdPersonController>();
+        _meshRenderer = transform.GetChild(0).GetChild(0).GetComponent<SkinnedMeshRenderer>();
+
+
+
         InsHealthBar();
     }
 
@@ -58,7 +63,7 @@ public class PlayerHealth : MonoBehaviour
     }
     public void FallingDamage()
     {
-        _currentHealth= 0;
+        _currentHealth = 0;
         UpdateHealthUI();
 
         _TPController.FallingDying();
@@ -77,10 +82,6 @@ public class PlayerHealth : MonoBehaviour
     void Die()
     {
 
-        if (deathEffectPrefab != null)
-        {
-            Instantiate(deathEffectPrefab, transform.position, transform.rotation);
-        }
 
         if (_TPController != null)
         {

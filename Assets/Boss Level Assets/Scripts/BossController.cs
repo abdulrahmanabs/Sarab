@@ -5,12 +5,16 @@ public class BossController : MonoBehaviour
 {
     private Animator _animator;
     private int _animIDHappy;
+    MeshCollider _meshCollider;
     EnemyHealth enemyHealth;
     private void Awake()
     {
         _animator = GetComponent<Animator>();
         enemyHealth = GetComponent<EnemyHealth>();
         _animIDHappy = Animator.StringToHash("PlayerDie");
+        _meshCollider = transform.GetChild(0).gameObject.GetComponent<MeshCollider>();
+
+
     }
 
     private void OnEnable()
@@ -30,11 +34,14 @@ public class BossController : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
 
+       
         if (other.gameObject.CompareTag("Bullet"))
         {
+
             Bullet Bullet = other.gameObject.GetComponent<Bullet>();
             if (Bullet.owner == ShooterWAW.player)
             {
+
                 enemyHealth.TakeDamage(Bullet.GetBulletDamage());
 
                 Bullet.activeHitEffect();

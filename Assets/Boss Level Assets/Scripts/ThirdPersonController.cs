@@ -7,7 +7,6 @@ using UnityEngine.Rendering;
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.UI;
 
 #endif
 
@@ -159,6 +158,7 @@ namespace StarterAssets
         private bool isSlowMotion;
         public ManageStamina Stamina;
 
+        bool die = false;
 
         public delegate void PlayerDieEventHandler();
         public static event PlayerDieEventHandler OnPlayerDie;
@@ -217,7 +217,10 @@ namespace StarterAssets
                 _input.attack = false;
 
             }
-
+            if (die)
+            {
+                _input.enabled = false;
+            }
             JumpAndGravity();
             GroundedCheck();
             Move();
@@ -305,7 +308,7 @@ namespace StarterAssets
         }
         private void Attack()
         {
-
+            if (die) return;
             firePoint.forward = _mainCamera.transform.forward;
             if (!Stamina.canAttack) return;
             // Check if the attack input is pressed and the player is not already attacking
@@ -319,6 +322,7 @@ namespace StarterAssets
                     _animator.SetTrigger(_animIDAttacking);
                     _attackCooldownTimer = AttackCooldown;
                     Stamina.currentStaminaTimer = 0;
+                    Stamina.empty();
                     Stamina.canAttack = false;
                     PlayRandomAttackSound();
                     ShootShadowBullet();
@@ -521,7 +525,7 @@ namespace StarterAssets
             float maxDistance = 100f;
             Vector3 direction = Vector3.down;
             int layerMask = LayerMask.GetMask("Ground");
-
+            die = true;
             // رسم الراي كاست في المشهد للتصحيح
             Debug.DrawRay(transform.position, direction * maxDistance, Color.red);
 

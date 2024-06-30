@@ -24,7 +24,7 @@ public class SceneManage : Singleton<SceneManage>
 
     public void LoadBossFightLevel()
     {
-        
+
         StartCoroutine(LoadLevel(2));
         PlayerPrefs.SetInt("UnlockedLevel", 2);
     }
