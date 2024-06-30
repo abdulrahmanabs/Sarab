@@ -53,7 +53,7 @@ public class BossSystem : MonoBehaviour
             {
                 temp = false;
                 int randomNumber = Random.Range(1, 11);
-                print(randomNumber);
+                
                 if (randomNumber > 5)
                 {
                     StartCoroutine("PlayRandomBossLought");

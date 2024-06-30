@@ -73,7 +73,7 @@ public class PlayerBossFightController : MonoBehaviour
         // Set the top-down camera to a fixed position above the player
         topDownCamera.Follow = null;
         audioManager.PlayMusic(_fallingSound);
-        
+
 
         // Debug log for confirmation
         Debug.Log("Player has fallen and died.");
@@ -86,7 +86,7 @@ public class PlayerBossFightController : MonoBehaviour
             // Move the player to the detected ground level
             transform.position = hit.point;
         }
-   
+
         _thirdPersonController.Grounded = true;
         _animator.SetBool("Jump", false);
         _animator.SetBool("FreeFall", false);

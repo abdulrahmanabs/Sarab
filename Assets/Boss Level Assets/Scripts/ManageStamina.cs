@@ -35,4 +35,8 @@ public class ManageStamina : MonoBehaviour
             }
         }
     }
+    public void empty()
+    {
+        staminaImage.fillAmount=0f;
+    }
 }

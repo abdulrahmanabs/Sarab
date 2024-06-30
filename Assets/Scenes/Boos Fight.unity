@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 2100000, guid: 3a3e42292f54a804fb2e8da54b1e56e1, type: 2}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 9d714c0308a07c84292ca36753ec277c, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -4090,19 +4090,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Range
-      value: 29.9
+      value: 62.45
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Cookie
       value: 
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.b
+      value: 0.27058825
+      objectReference: {fileID: 0}
+    - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.g
+      value: 0.39215687
+      objectReference: {fileID: 0}
+    - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5294118
+      objectReference: {fileID: 0}
+    - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Intensity
-      value: 1000
+      value: 100000
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_SpotAngle
-      value: 74.364655
+      value: 40.28508
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Lightmapping
@@ -4110,7 +4122,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_InnerSpotAngle
-      value: 21.166733
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: -6286921089584020604, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Shadows.m_Type
@@ -4125,8 +4137,32 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Range
+      value: 38.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.b
+      value: 0.27162692
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.g
+      value: 0.3921316
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_Color.r
+      value: 0.5283019
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
       propertyPath: m_Intensity
-      value: 1000
+      value: 1000000
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_SpotAngle
+      value: 87.277466
+      objectReference: {fileID: 0}
+    - target: {fileID: 9133566998129567061, guid: ff1e01e4dfcee394f8e53742bf968381, type: 3}
+      propertyPath: m_InnerSpotAngle
+      value: 34.079575
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -6368,7 +6404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   staminaImage: {fileID: 516598911}
   currentStaminaTimer: 0
-  staminaMax: 9
+  staminaMax: 5
   canAttack: 0
 --- !u!54 &1813607579
 Rigidbody:
@@ -6600,7 +6636,7 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1875325635
 MonoBehaviour:
-  m_ObjectHideFlags: 0
+  m_ObjectHideFlags: 8
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -6615,7 +6651,7 @@ MonoBehaviour:
   torchLight1: {fileID: 1848282807}
   torchLight2: {fileID: 1945663324}
   isBeaconLit: 0
-  rotationSpeed: 10
+  rotationSpeed: 50
 --- !u!1 &1890862673
 GameObject:
   m_ObjectHideFlags: 3
@@ -7955,7 +7991,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 13780302, guid: 48b470c6a762f60438c631f219257520, type: 3}
       propertyPath: m_Materials.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 13780302, guid: 48b470c6a762f60438c631f219257520, type: 3}
       propertyPath: m_Materials.Array.data[0]
@@ -7964,9 +8000,8 @@ PrefabInstance:
     - target: {fileID: 13780302, guid: 48b470c6a762f60438c631f219257520, type: 3}
       propertyPath: m_Materials.Array.data[1]
       value: 
-      objectReference: {fileID: 2100000, guid: f9275cba7d9265847a78590c20835ac6, type: 2}
-    m_RemovedComponents:
-    - {fileID: 9571598, guid: 48b470c6a762f60438c631f219257520, type: 3}
+      objectReference: {fileID: -876546973899608171, guid: 9446fe00852be3e40a7f75c6c086ab87, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects:
     - {fileID: 196358, guid: 48b470c6a762f60438c631f219257520, type: 3}
     - {fileID: 109526, guid: 48b470c6a762f60438c631f219257520, type: 3}
@@ -8311,7 +8346,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4840015324335278236, guid: 57f3b2b84ee8f4d4bab2c823e9ce92c1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5838126931514591071, guid: 57f3b2b84ee8f4d4bab2c823e9ce92c1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9557,6 +9592,7 @@ MonoBehaviour:
   Playerhealthbar: {fileID: 534546517}
   deathEffectPrefab: {fileID: 0}
   _animLoader: {fileID: 1985364606}
+  _deathMaterial: {fileID: 2100000, guid: baf1268acac2c60469c15fa2073cf2b4, type: 2}
 --- !u!114 &6982812147933622150
 MonoBehaviour:
   m_ObjectHideFlags: 0

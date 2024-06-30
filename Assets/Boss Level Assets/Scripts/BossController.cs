@@ -14,7 +14,7 @@ public class BossController : MonoBehaviour
         _animIDHappy = Animator.StringToHash("PlayerDie");
         _meshCollider = transform.GetChild(0).gameObject.GetComponent<MeshCollider>();
 
-        
+
     }
 
     private void OnEnable()
@@ -33,15 +33,15 @@ public class BossController : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        print("JOINED1");
-        print(other.gameObject.name);
+
+       
         if (other.gameObject.CompareTag("Bullet"))
         {
-            print("JOINED2");
+
             Bullet Bullet = other.gameObject.GetComponent<Bullet>();
             if (Bullet.owner == ShooterWAW.player)
             {
-                print("JOINED3");
+
                 enemyHealth.TakeDamage(Bullet.GetBulletDamage());
 
                 Bullet.activeHitEffect();
