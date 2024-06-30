@@ -6,8 +6,7 @@ public class ManageStamina : MonoBehaviour
     [Header("Variables and Constant")]
     [SerializeField] public Image staminaImage;
     public float currentStaminaTimer = 0f;
-    [SerializeField] private float staminaMax;
-    private float staminaTimer = 0f;
+    [SerializeField] private float staminaMax=1;
     public bool canAttack = false;
     private void Start()
     {
