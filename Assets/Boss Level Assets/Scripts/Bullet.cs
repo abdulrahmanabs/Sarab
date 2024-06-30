@@ -31,8 +31,9 @@ public class Bullet : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         Destroy(gameObject, 4);
     }
-    public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction)
+    public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction, float bulletSpeed = 20f)
     {
+        _bulletSpeedShoot = bulletSpeed;
         _bolletDamage = damage;
         this.owner = owner;
         _direction = direction;
@@ -46,7 +47,9 @@ public class Bullet : MonoBehaviour
         {
             tr.colorGradient = bossGradient;
             meshRenderer.material.color = Color.black;
+
         }
+
     }
     void Update()
     {
