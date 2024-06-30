@@ -192,6 +192,7 @@ namespace StarterAssets
             _controller = GetComponent<CharacterController>();
             _input = GetComponent<StarterAssetsInputs>();
             PlayerHealth = GetComponent<PlayerHealth>();
+            Stamina = FindObjectOfType<ManageStamina>();
 #if ENABLE_INPUT_SYSTEM
             _playerInput = GetComponent<PlayerInput>();
 #else

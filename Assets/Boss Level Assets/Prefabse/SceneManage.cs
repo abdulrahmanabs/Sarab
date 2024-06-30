@@ -5,6 +5,12 @@ using UnityEngine.SceneManagement;
 public class SceneManage : Singleton<SceneManage>
 {
     public Animator animator;
+    private int currentLevel=1;
+
+    private void OnEnable()
+    {
+        currentLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+    }
     public void CloseApp()
     {
         print("Exit");
@@ -49,7 +55,8 @@ public class SceneManage : Singleton<SceneManage>
 
     public void ReseteGame()
     {
-        PlayerPrefs.SetInt("UnlockedLevel", 1);
+        currentLevel = 1;
+        PlayerPrefs.SetInt("UnlockedLevel", currentLevel);
     }
 
 
