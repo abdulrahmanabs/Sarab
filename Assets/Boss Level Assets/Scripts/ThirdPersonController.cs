@@ -347,6 +347,7 @@ namespace StarterAssets
             // Calculate the new velocity direction (180 degrees from the current forward direction)
             Vector3 DirectionShoot = firePoint.forward * bulletSpeed;
 
+            CameraShaker.Instance.ShakeCamera(.1f, 3,2);
             // Apply the new velocit
             bullet.GetComponent<Bullet>().SetBulletProb(10f, ShooterWAW.player, DirectionShoot);
 

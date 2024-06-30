@@ -17,6 +17,7 @@ public class PauseController : MonoBehaviour
     {
         inputActions.UI.Enable();
         inputActions.UI.Pause.performed += TogglePause;
+        Time.timeScale = 1;
     }
 
     private void OnDisable()
@@ -29,7 +30,7 @@ public class PauseController : MonoBehaviour
     {
         isPaused = !isPaused;
         pausePanel.SetActive(isPaused);
-        cinemachineCamera.enabled = !cinemachineCamera.enabled;
+        
         if (isPaused)
         {
             Time.timeScale = 0f; // Pause the game

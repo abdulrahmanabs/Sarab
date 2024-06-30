@@ -10,6 +10,7 @@ public class SceneManage : Singleton<SceneManage>
     private void OnEnable()
     {
         currentLevel = PlayerPrefs.GetInt("UnlockedLevel", 1);
+        
     }
     public void CloseApp()
     {
@@ -39,17 +40,19 @@ public class SceneManage : Singleton<SceneManage>
     public IEnumerator LoadLevel(string levelName)
     {
         animator.SetTrigger("Start");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
         SceneManager.LoadScene(levelName);
 
     }
 
     public IEnumerator LoadLevel(int levelIndex)
     {
+        print("1");
         animator.SetTrigger("Start");
-        yield return new WaitForSeconds(1);
+        print("2");
+        yield return new WaitForSecondsRealtime(1);
         SceneManager.LoadScene(levelIndex);
-
+        print("44");
     }
 
 
@@ -67,8 +70,16 @@ public class SceneManage : Singleton<SceneManage>
     IEnumerator LoadLevel()
     {
         animator.SetTrigger("Start");
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSecondsRealtime(1);
         SceneManager.LoadScene("GamePlayScene");
+    }
+
+    public void ReloadLevel() {
+
+        print("JOINED");
+        print(SceneManager.GetActiveScene().buildIndex);
+        int level = SceneManager.GetActiveScene().buildIndex;
+        StartCoroutine(LoadLevel(level));
     }
 
 }
