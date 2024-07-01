@@ -95,12 +95,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.8139807
+  m_TransitionDuration: 0.19176109
   m_TransitionOffset: 0
-  m_ExitTime: 0.09686009
+  m_ExitTime: 0.0023187194
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1102 &-5088353888296947374
@@ -111,7 +111,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Idle Boss
-  m_Speed: 1
+  m_Speed: 1.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 8580247505649529688}
@@ -248,12 +248,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 1.0153743
+  m_TransitionDuration: 0.09495203
   m_TransitionOffset: 0
-  m_ExitTime: 0.035567384
+  m_ExitTime: 0.019396197
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &-563957086675168967
@@ -636,12 +636,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.8212477
-  m_TransitionOffset: 0
-  m_ExitTime: 0.11646157
-  m_HasExitTime: 1
+  m_TransitionDuration: 0.123096086
+  m_TransitionOffset: 0.04985383
+  m_ExitTime: 0.04250484
+  m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1101 &5421122983589300926
@@ -712,12 +712,12 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.3173247
+  m_TransitionDuration: 0.15360135
   m_TransitionOffset: 0
-  m_ExitTime: 0.384246
+  m_ExitTime: 0.0000000010982187
   m_HasExitTime: 0
   m_HasFixedDuration: 1
-  m_InterruptionSource: 0
+  m_InterruptionSource: 2
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
 --- !u!1102 &7330651455549225199

@@ -12,7 +12,7 @@ EditorBuildSettings:
     path: Assets/Scenes/Main Hub matrix.unity
     guid: 75b6cf1a0d87b27408b9fd8882713ad5
   - enabled: 1
-    path: Assets/Scenes/Boos Fight 1.unity
+    path: Assets/Scenes/Boos Fight.unity
     guid: e7a587bf50cfad94eb4bfec6fcf78ae2
   - enabled: 1
     path: Assets/Scenes/Comming soon.unity

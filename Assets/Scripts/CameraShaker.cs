@@ -1,78 +1,57 @@
-using System.Collections;
-using UnityEngine;
+/* 
+    ------------------- Code Monkey -------------------
+
+    Thank you for downloading this package
+    I hope you find it useful in your projects
+    If you have any questions let me know
+    Cheers!
+
+               unitycodemonkey.com
+    --------------------------------------------------
+ */
+
 using Cinemachine;
-public class CameraShaker : Singleton<CameraShaker>
+using UnityEngine;
+
+public class CameraShaker : MonoBehaviour
 {
 
-    /// the amplitude of the camera's noise when it's idle
-    public float IdleAmplitude = 0.1f;
-    /// the frequency of the camera's noise when it's idle
-    public float IdleFrequency = 1f;
+    public static CameraShaker Instance { get; private set; }
 
-    /// The default amplitude that will be applied to your shakes if you don't specify one
-    public float DefaultShakeAmplitude = .5f;
-    /// The default frequency that will be applied to your shakes if you don't specify one
-    public float DefaultShakeFrequency = 10f;
+    private CinemachineVirtualCamera cinemachineVirtualCamera;
+    private float shakeTimer;
+    private float shakeTimerTotal;
+    private float startingIntensity;
 
-    protected Vector3 _initialPosition;
-    protected Quaternion _initialRotation;
-
-    protected Cinemachine.CinemachineBasicMultiChannelPerlin _perlin;
-    protected Cinemachine.CinemachineVirtualCamera _virtualCamera;
-
-  
-
-    /// <summary>
-    /// On Start we reset our camera to apply our base amplitude and frequency
-    /// </summary>
-    protected virtual void Start()
+    private void Awake()
     {
-        _virtualCamera = FindObjectOfType<Cinemachine.CinemachineVirtualCamera>();
-        _perlin = _virtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        CameraReset();
+        Instance = this;
+        cinemachineVirtualCamera = GetComponent<CinemachineVirtualCamera>();
     }
 
-    /// <summary>
-    /// Use this method to shake the camera for the specified duration (in seconds) with the default amplitude and frequency
-    /// </summary>
-    /// <param name="duration">Duration.</param>
-    public virtual void ShakeCamera(float duration)
+    public void ShakeCamera(float intensity, float time)
     {
-        StartCoroutine(ShakeCameraCo(duration, DefaultShakeAmplitude, DefaultShakeFrequency));
+        CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
+            cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+        cinemachineBasicMultiChannelPerlin.m_AmplitudeGain = intensity;
+
+        startingIntensity = intensity;
+        shakeTimerTotal = time;
+        shakeTimer = time;
     }
 
-    /// <summary>
-    /// Use this method to shake the camera for the specified duration (in seconds), amplitude and frequency
-    /// </summary>
-    /// <param name="duration">Duration.</param>
-    /// <param name="amplitude">Amplitude.</param>
-    /// <param name="frequency">Frequency.</param>
-    public virtual void ShakeCamera(float duration, float amplitude, float frequency)
+    private void Update()
     {
-        StartCoroutine(ShakeCameraCo(duration, amplitude, frequency));
+        if (shakeTimer > 0)
+        {
+            shakeTimer -= Time.deltaTime;
+            CinemachineBasicMultiChannelPerlin cinemachineBasicMultiChannelPerlin =
+                cinemachineVirtualCamera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+
+            cinemachineBasicMultiChannelPerlin.m_AmplitudeGain =
+                Mathf.Lerp(startingIntensity, 0f, 1 - shakeTimer / shakeTimerTotal);
+        }
     }
 
-    /// <summary>
-    /// This coroutine will shake the 
-    /// </summary>
-    /// <returns>The camera co.</returns>
-    /// <param name="duration">Duration.</param>
-    /// <param name="amplitude">Amplitude.</param>
-    /// <param name="frequency">Frequency.</param>
-    protected virtual IEnumerator ShakeCameraCo(float duration, float amplitude, float frequency)
-    {
-        _perlin.m_AmplitudeGain = amplitude;
-        _perlin.m_FrequencyGain = frequency;
-        yield return new WaitForSeconds(duration);
-        CameraReset();
-    }
-
-    /// <summary>
-    /// Resets the camera's noise values to their idle values
-    /// </summary>
-    public virtual void CameraReset()
-    {
-        _perlin.m_AmplitudeGain = IdleAmplitude;
-        _perlin.m_FrequencyGain = IdleFrequency;
-    }
 }

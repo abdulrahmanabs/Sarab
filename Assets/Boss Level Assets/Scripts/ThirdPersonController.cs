@@ -150,6 +150,8 @@ namespace StarterAssets
         [Header("Audiomanage")]
         public List<AudioClip> attackSounds;
         private AudioManager audioManager;
+        [SerializeField] private AudioClip PlayerShootBulletClip;
+
 
         [Header("Player attack")]
         public Transform firePoint; // Point from where the bullet will be fired
@@ -327,7 +329,7 @@ namespace StarterAssets
                     PlayRandomAttackSound();
                     ShootShadowBullet();
                     transform.forward = firePoint.forward;
-
+                    Stamina.staminaImage.color = new Color32(102, 149, 255, 255);
 
 
                 }
@@ -342,12 +344,13 @@ namespace StarterAssets
         {
 
             GameObject bullet = Instantiate(shadowBulletPrefab, firePoint.position, firePoint.rotation);
-
+            audioManager.PlaySoundEffect(PlayerShootBulletClip);
+            bullet.transform.GetChild(0).gameObject.SetActive(false);
 
             // Calculate the new velocity direction (180 degrees from the current forward direction)
             Vector3 DirectionShoot = firePoint.forward * bulletSpeed;
 
-            CameraShaker.Instance.ShakeCamera(.1f, 3,2);
+            CameraShaker.Instance.ShakeCamera(7f, .1f);
             // Apply the new velocit
             bullet.GetComponent<Bullet>().SetBulletProb(10f, ShooterWAW.player, DirectionShoot);
 

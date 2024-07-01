@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-2353395597826771293
+--- !u!114 &-2751058095176953590
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -66,17 +66,17 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Amplitude: 1
+    - _Amplitude: 0.74
     - _Depthpower: 1
-    - _Emission: 2
-    - _Frequency: -20.9
-    - _Opacity: 10
+    - _Emission: 258.29
+    - _Frequency: 10
+    - _Opacity: 1
     - _QueueControl: 0
     - _QueueOffset: 0
-    - _StartFrequency: 2
+    - _StartFrequency: 9.19
     - _Useblack: 0
     - _Usedepth: 0
     - __dirty: 1
     m_Colors:
-    - _Color: {r: 0, g: 0, b: 0, a: 1}
+    - _Color: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

@@ -24,6 +24,7 @@ public class PlayerBossFightController : MonoBehaviour
     private Animator _animator;
     private CharacterController _characterController;
     [SerializeField] private AudioClip _fallingSound;
+    [SerializeField] private AudioClip PlayerTakeDamageClip;
     private AudioManager audioManager;
     private void Start()
     {
@@ -54,6 +55,7 @@ public class PlayerBossFightController : MonoBehaviour
             Bullet Bullet = other.gameObject.GetComponent<Bullet>();
             if (Bullet.owner == ShooterWAW.boss)
             {
+                audioManager.PlaySoundEffect(PlayerTakeDamageClip);
                 _thirdPersonController.TakeDamage(Bullet.GetBulletDamage());
 
                 Bullet.activeHitEffect();
