@@ -30,13 +30,17 @@ public class PauseController : MonoBehaviour
     {
         isPaused = !isPaused;
         pausePanel.SetActive(isPaused);
-        
+
         if (isPaused)
         {
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
             Time.timeScale = 0f; // Pause the game
         }
         else
         {
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
             Time.timeScale = 1f; // Resume the game
         }
     }

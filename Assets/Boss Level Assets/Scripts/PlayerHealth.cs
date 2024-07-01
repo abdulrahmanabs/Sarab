@@ -53,7 +53,7 @@ public class PlayerHealth : MonoBehaviour
     {
         _currentHealth -= amount;
         UpdateHealthUI();
-        CameraShaker.Instance.ShakeCamera(7f, .1f);
+        CameraShaker.Instance.ShakeCamera(15f, .1f);
 
         if (_currentHealth <= 0)
         {

@@ -31,7 +31,8 @@ public class BossController : MonoBehaviour
     }
 
     private void PlayHappyAnimation()
-    {   get
+    {
+        GetComponentInChildren<BoxCollider>().enabled = false;
         _animator.SetTrigger(_animIDHappy);
     }
     private void OnTriggerEnter(Collider other)
