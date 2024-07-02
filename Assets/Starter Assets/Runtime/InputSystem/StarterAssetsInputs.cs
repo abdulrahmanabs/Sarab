@@ -59,7 +59,14 @@ namespace StarterAssets
 
         public void LookInput(Vector2 newLookDirection)
         {
-            look = newLookDirection * slowMoveMultiplier;
+            if (Gamepad.current != null && Gamepad.current.rightStick.IsPressed())
+            {
+                look = newLookDirection * slowMoveMultiplier;
+            }
+            else
+            {
+                look = newLookDirection;
+            }
         }
 
         public void JumpInput(bool newJumpState)
