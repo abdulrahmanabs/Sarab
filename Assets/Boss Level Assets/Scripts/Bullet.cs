@@ -29,7 +29,7 @@ public class Bullet : MonoBehaviour
         _bulletRB = GetComponent<Rigidbody>();
         tr = GetComponent<TrailRenderer>();
         meshRenderer = GetComponent<MeshRenderer>();
-        Destroy(gameObject, 4);
+        Destroy(gameObject, 7);
     }
     public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction, float bulletSpeed = 20f)
     {

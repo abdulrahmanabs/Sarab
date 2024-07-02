@@ -31,10 +31,9 @@ public class SceneManage : Singleton<SceneManage>
     }
     public void PlayButton()
     {
-        if (PlayerPrefs.GetInt("UnlockedLevel", 1) == 1)
+        
             StartCoroutine(LoadLevel("Main Hub matrix"));
-        else
-            LoadBossFightLevel();
+     
     }
 
     public IEnumerator LoadLevel(string levelName)

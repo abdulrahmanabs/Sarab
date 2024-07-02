@@ -141,7 +141,7 @@ namespace StarterAssets
         private float _knockbackTimeRemaining;
         private float _knockbackForce;
 
-        public float slowMotionDuration = 2f;
+        public float slowMotionDuration = 1.3f;
 
         public float AttackCooldown = 0.5f;
         private float _attackCooldownTimer = 0f;
@@ -206,7 +206,8 @@ namespace StarterAssets
             // reset our timeouts on start
             _jumpTimeoutDelta = JumpTimeout;
             _fallTimeoutDelta = FallTimeout;
-
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
 
         }
 
@@ -591,7 +592,7 @@ namespace StarterAssets
 
         }
 
-
+        
         IEnumerator GrayScale()
         {
 
@@ -601,7 +602,7 @@ namespace StarterAssets
             {
                 float startSaturation = color.saturation.value;
                 float targetSaturation = -100f;
-                float duration = 2f;
+                float duration = 0.25f;
                 float elapsedTime = 0f;
 
                 while (elapsedTime < duration)
@@ -616,7 +617,7 @@ namespace StarterAssets
                 color.saturation.value = targetSaturation;
             }
 
-            // yield return new WaitForSeconds(slowMotionDuration);
+             yield return new WaitForSeconds(slowMotionDuration);
 
             if (postProcess.profile.TryGet(out color))
             {

@@ -6,13 +6,15 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField] private float _maxHealth = 100f;
     [SerializeField] private float _currentHealth;
     [SerializeField] private Animator _animator;
-    [SerializeField] private Image _bossHealthUI;
+    [SerializeField] private Image _bossHealthUI;       
     public UnityEvent onBossDeath;
+    private BossSystem _bossSystem;
     private void Start()
     {
         _currentHealth = _maxHealth;
         _bossHealthUI.fillAmount = _currentHealth / _maxHealth;
         _animator = GetComponent<Animator>();
+        _bossSystem = GetComponent<BossSystem>();
     }
     public void TakeDamage(float amount)
     {
@@ -29,6 +31,8 @@ public class EnemyHealth : MonoBehaviour
         else
         {
             _animator.SetTrigger("TakeDamage");
+            if (_currentHealth <= 50)
+                _bossSystem.bulletSpeed = 35;
         }
     }
 

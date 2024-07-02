@@ -27,13 +27,17 @@ public class BossSystem : MonoBehaviour
     [SerializeField] private GameObject _bulletPrefab;
     [SerializeField] private Transform _bulletSpawnPoint;
     private bool hasPlayedLought = false; // Boolean flag
-
+    private Transform player;
+   
+    public float bulletSpeed = 10;
+    public float damage = 10;
 
     bool temp = true;
     private void Start()
     {
         audioManager = AudioManager.Instance;
         _animator = GetComponent<Animator>();
+        player = FindAnyObjectByType<PlayerHealth>().transform;
     }
 
     void Update()
@@ -130,7 +134,7 @@ public class BossSystem : MonoBehaviour
 
             Vector3 direction = _bulletSpawnPoint.position;
             GameObject bullet = Instantiate(_bulletPrefab, direction, bulletRotation);
-            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
+            bullet.GetComponent<Bullet>().SetBulletProb(damage, ShooterWAW.boss, direction, bulletSpeed);
 
         }
         CheckIdleAnimationAndPlayAttack();
@@ -154,7 +158,7 @@ public class BossSystem : MonoBehaviour
 
             Vector3 direction = _bulletSpawnPoint.position;
             GameObject bullet = Instantiate(_bulletPrefab, direction, bulletRotation);
-            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
+            bullet.GetComponent<Bullet>().SetBulletProb(damage, ShooterWAW.boss, direction, bulletSpeed);
             yield return new WaitForSeconds(0.1f);
         }
 
@@ -172,7 +176,7 @@ public class BossSystem : MonoBehaviour
             Vector3 spawnPosition = _bulletSpawnPoint.position + (_bulletSpawnPoint.right * (i * spacing - _lineLength / 2));
             GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, Quaternion.Euler(_bulletSpawnPoint.rotation.x, _bulletSpawnPoint.rotation.y - 90, _bulletSpawnPoint.rotation.z));
             Vector3 direction = spawnPosition;
-            bullet.GetComponent<Bullet>().SetBulletProb(10, ShooterWAW.boss, direction);
+            bullet.GetComponent<Bullet>().SetBulletProb(damage, ShooterWAW.boss, direction, bulletSpeed);
         }
 
 
@@ -201,7 +205,7 @@ public class BossSystem : MonoBehaviour
             GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, bulletRotation);
 
             // ضبط خصائص الرصاصة
-            bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction);
+            bullet.GetComponent<Bullet>().SetBulletProb(damage, ShooterWAW.boss, direction, bulletSpeed);
         }
 
         // التحقق من حالة الانميشن وتشغيل هجوم إذا كان مطلوبًا
@@ -212,7 +216,7 @@ public class BossSystem : MonoBehaviour
         // إعدادات الرصاصات
         int waveHeight = 5; // ارتفاع الموجة
         int waveWidth = 10; // عرض الموجة
-        float bulletSpeed = 10f; // سرعة الرصاصة
+        
 
         for (int i = 0; i < waveWidth; i++)
         {
@@ -225,12 +229,13 @@ public class BossSystem : MonoBehaviour
                 Vector3 spawnPosition = _bulletSpawnPoint.position + new Vector3(xOffset, 0, yOffset);
                 spawnPosition.y = spawnPosition.y - 0.5f;
                 Quaternion bulletRotation = Quaternion.Euler(_bulletSpawnPoint.rotation.x, _bulletSpawnPoint.rotation.y - 90, _bulletSpawnPoint.rotation.z);
+                Vector3 playerDirection = (player.transform.position - _bulletSpawnPoint.position).normalized;
 
                 GameObject bullet = Instantiate(_bulletPrefab, spawnPosition, bulletRotation);
                 Vector3 direction = _bulletSpawnPoint.forward;
 
-                // ضبط خصائص الرصاصة
-                bullet.GetComponent<Bullet>().SetBulletProb(bulletSpeed, ShooterWAW.boss, direction, 100f);
+
+                bullet.GetComponent<Bullet>().SetBulletProb(damage, ShooterWAW.boss, direction, bulletSpeed);
             }
         }
 
