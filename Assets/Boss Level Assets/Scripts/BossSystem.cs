@@ -28,8 +28,8 @@ public class BossSystem : MonoBehaviour
     [SerializeField] private Transform _bulletSpawnPoint;
     private bool hasPlayedLought = false; // Boolean flag
     private Transform player;
-   
-    public float bulletSpeed = 10;
+
+    public float bulletSpeed = 18;
     public float damage = 10;
 
     bool temp = true;
@@ -107,6 +107,7 @@ public class BossSystem : MonoBehaviour
             audioManager.PlaySoundEffect(attackClip);
         }
     }
+
     public void ShootRandomPattern()
     {
         // تعريف قائمة الدوال
@@ -216,7 +217,7 @@ public class BossSystem : MonoBehaviour
         // إعدادات الرصاصات
         int waveHeight = 5; // ارتفاع الموجة
         int waveWidth = 10; // عرض الموجة
-        
+
 
         for (int i = 0; i < waveWidth; i++)
         {

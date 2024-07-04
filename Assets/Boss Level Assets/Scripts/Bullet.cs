@@ -31,7 +31,7 @@ public class Bullet : MonoBehaviour
         meshRenderer = GetComponent<MeshRenderer>();
         Destroy(gameObject, 7);
     }
-    public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction, float bulletSpeed = 20f)
+    public void SetBulletProb(float damage, ShooterWAW owner, Vector3 direction, float bulletSpeed = 25f)
     {
         _bulletSpeedShoot = bulletSpeed;
         _bolletDamage = damage;

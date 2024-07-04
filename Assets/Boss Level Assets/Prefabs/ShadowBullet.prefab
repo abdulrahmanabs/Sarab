@@ -149,7 +149,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddcaadabfd5010f458e338e3455bd17b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _bulletSpeedShoot: 20
+  _bulletSpeedShoot: 25
   _bolletDamage: 10
   owner: 0
   _hitEffectPrefab: {fileID: 8125293011081144787, guid: b67ce36390185db41a6c5cd210223f7e, type: 3}

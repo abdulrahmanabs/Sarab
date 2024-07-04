@@ -122,25 +122,6 @@ AnimatorStateTransition:
   m_InterruptionSource: 0
   m_OrderedInterruption: 1
   m_CanTransitionToSelf: 1
---- !u!1107 &-6148019585458807324
-AnimatorStateMachine:
-  serializedVersion: 6
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: New StateMachine
-  m_ChildStates: []
-  m_ChildStateMachines: []
-  m_AnyStateTransitions: []
-  m_EntryTransitions: []
-  m_StateMachineTransitions: {}
-  m_StateMachineBehaviours: []
-  m_AnyStatePosition: {x: 50, y: 20, z: 0}
-  m_EntryPosition: {x: 50, y: 120, z: 0}
-  m_ExitPosition: {x: 800, y: 120, z: 0}
-  m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
-  m_DefaultState: {fileID: 0}
 --- !u!1107 &-5602963042399094863
 AnimatorStateMachine:
   serializedVersion: 6
@@ -171,10 +152,7 @@ AnimatorStateMachine:
   - serializedVersion: 1
     m_State: {fileID: 6271395567565120655}
     m_Position: {x: 940, y: 530, z: 0}
-  m_ChildStateMachines:
-  - serializedVersion: 1
-    m_StateMachine: {fileID: -6148019585458807324}
-    m_Position: {x: 384.5, y: 1245.5, z: 0}
+  m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
   m_StateMachineTransitions: {}
@@ -503,9 +481,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.09764749
-  m_TransitionOffset: 0.08027425
-  m_ExitTime: 0.30146867
+  m_TransitionDuration: 0.09764738
+  m_TransitionOffset: 0
+  m_ExitTime: 0.032680538
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -670,9 +648,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.40657818
-  m_TransitionOffset: 0.17544864
-  m_ExitTime: 0.53401554
+  m_TransitionDuration: 0.40657824
+  m_TransitionOffset: 0.12756163
+  m_ExitTime: 0.21476926
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 0
@@ -719,9 +697,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.4340285
-  m_TransitionOffset: 0.01575875
-  m_ExitTime: 0.39948252
+  m_TransitionDuration: 0.10130641
+  m_TransitionOffset: 0
+  m_ExitTime: 0.27267376
   m_HasExitTime: 1
   m_HasFixedDuration: 1
   m_InterruptionSource: 2
@@ -906,7 +884,7 @@ AnimatorState:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Punching
-  m_Speed: 1
+  m_Speed: 2.5
   m_CycleOffset: 0
   m_Transitions:
   - {fileID: 4824463528462729296}
@@ -1064,9 +1042,9 @@ AnimatorStateTransition:
   m_Mute: 0
   m_IsExit: 0
   serializedVersion: 3
-  m_TransitionDuration: 0.07026373
+  m_TransitionDuration: 0.07026372
   m_TransitionOffset: 0
-  m_ExitTime: 0.03574113
+  m_ExitTime: 0.016860733
   m_HasExitTime: 0
   m_HasFixedDuration: 0
   m_InterruptionSource: 0
